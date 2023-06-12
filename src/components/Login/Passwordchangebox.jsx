@@ -26,7 +26,8 @@ const Forgotpwbox = () => {
     const handleSubmit = e => {
         e.preventDefault();
         //🔥 reset/token
-        axios.post(`${API.CHANGEPW, token}`, { password, confirmpassword, token })
+        // axios.post(`${API.CHANGEPW, token}`, { password, confirmpassword, token })
+        axios.post(`http://localhost:4000/reset/${token}`, { password, confirmpassword, token })
             .then(res => {
                 if (res.status === 200) {
                     navigate('/login');

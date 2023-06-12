@@ -2,6 +2,8 @@ import React, { useState, useCallback, useRef, useEffect} from "react";
 // import axios from "axios";
 // import { API } from "../../config";
 // import { useNavigate } from 'react-router-dom';
+import { useQuery } from "react-query"; 
+import axios from 'axios';
 import 'reactflow/dist/style.css';
 import ReactFlow, { 
     useNodesState, 
@@ -17,35 +19,63 @@ import ReactFlow, {
 } from 'reactflow';
 
 
-const initialNodes = [
-    { id: '1', position: { x: 400, y: 200 }, data: { label: '공사 초기' } },
-    { id: '2', position: { x: 400, y: 400 }, data: { label: '공사 중기' } },
-    { id: '3', position: { x: 400, y: 600 }, data: { label: '공사 말기' } },
-  ];
+// const initialNodes = [
+//     { id: '1', position: { x: 400, y: 200 }, data: { label: '공사 초기' } },
+//     { id: '2', position: { x: 400, y: 400 }, data: { label: '공사 중기' } },
+//     { id: '3', position: { x: 400, y: 600 }, data: { label: '공사 말기' } },
+//   ];
+
+const fetchinitialNodes = () => {
+    return axios.get('http://localhost:4000/initialNodes')
+}
+
 
 //🔥 Setting for node id
 let id = 4;
 const getId = () => `${id++}`;
 
 
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' },
-                      { id: 'e2-3', source: '2', target: '3' }];
+// const initialEdges = [{ id: 'e1-2', source: '1', target: '2' },
+//                       { id: 'e2-3', source: '2', target: '3' }];
 
 const Editingbox = () => {
+    // 🍊 Using Queries 
+    const {isLoading, fetchedNodes} = useQuery('initialNodes', fetchinitialNodes)
+    
     //🔥 Adding Node!
     const reactFlowWrapper = useRef(null);
     const connectingNodeId = useRef(null);
+    //🌸 changing node name! 
+    const [selectedNode, setSelectedNode] = useState(null);
+    const [nodeName, setNodeName] = useState('');
+
+    const initialNodes = [];
+    const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }, 
+                        { id: 'e2-3', source: '2', target: '3' }];
+    
+    if(!isLoading){
+        initialNodes = fetchedNodes.data;
+        console.log(initialNodes)
+    }
+
+    // console.log('fetched Nodes: ', fetchedNodes.data);
+
     //🍀 first setting!
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    
+    if(!isLoading){
+        initialNodes = fetchedNodes.data;
+        console.log(initialNodes);
+        onNodesChange(fetchedNodes.data);
+    }
+    
+    
     //🔥 Adding Node!
     const { project } = useReactFlow();
     //🍀 first setting!
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
-    //🌸 changing node name! 
-    const [selectedNode, setSelectedNode] = useState(null);
-    const [nodeName, setNodeName] = useState('');
     useEffect(() => {
         if(selectedNode) {
             setNodeName(selectedNode.data.label);

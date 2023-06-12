@@ -10,5 +10,11 @@
             "position" : { "x" :400, "y": 400},
             "data" : {"label" : "공사 중기"}
         }
-    ]
+    ],
+    
+    "initialNodes" : [
+        { "id": 1, "position": { "x": 400, "y": 200 }, "data": { "label": "공사 초기" } },
+        { "id": 2, "position": { "x": 400, "y": 400 }, "data": { "label": "공사 중기" } },
+        { "id": 3, "position": { "x": 400, "y": 600 }, "data": { "label": "공사 말기" } }
+      ]
 }

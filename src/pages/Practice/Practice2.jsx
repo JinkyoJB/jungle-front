@@ -8,7 +8,7 @@ const fetchNodes = () => {
 
 function Practicepage2() {
     const {isLoading, data} = useQuery('nodes', fetchNodes)
-    console.log('Yalla: ', data.data);
+    // console.log('Yalla: ', data.data);
     
     if(isLoading){
         return <h2>Loaing.. </h2>

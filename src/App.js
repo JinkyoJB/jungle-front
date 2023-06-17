@@ -34,8 +34,8 @@ function App() {
         <Route path="/editor" element={<Editor />} />
         <Route path="/newproject" element={<Editor2 />} />
         <Route path="/existingproject" element={<Editor4 />} />
-{/*         
-        <Route path="/tree" element={<ForcedDirectedTree/>} />
+        
+        {/* <Route path="/tree" element={<ForcedDirectedTree/>} />
         <Route path="/venn" element={<VennDiagram />} /> */}
         {/* <Route path="/editor3" element={<Editor3 />} /> */}
         

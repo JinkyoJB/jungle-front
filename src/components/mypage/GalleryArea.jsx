@@ -8,6 +8,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
+
 const GalleryContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -30,8 +31,9 @@ const postActiveTags = (activeTags) => {
     return request({ url: 'api/galleryTags', method: 'POST', data: { tags: activeTags } });
 }
 
+
 const GalleryBox = () => {
-    const buttons = ['total', 'tool', 'animal', 'clothing', 'vehicle', 'food', 'person', 'building', 'sports equipment', 'furniture', 'kitchenware', 'office supplies', 'plant'];
+    const buttons = ['tool', 'animal', 'clothing', 'vehicle', 'food', 'person', 'building', 'sports equipment', 'furniture', 'kitchenware', 'office supplies', 'plant'];
     const [activeButtons, setActiveButtons] = useState({})
 
     const { data: initialData, isLoading, isError, error } = useQuery('imagesQuery', fetchGallery);
@@ -69,17 +71,16 @@ const GalleryBox = () => {
     return (
         <div>
             <GalleryContainer>
-
             <div className='flex flex-wrap justify-center'> 보고싶은 사진의 tag를 선택하세요! </div>
                 <div className="button-box bg-purple-100 h-20 mb-2 rounded-lg shadow-lg flex flex-wrap justify-center items-center">
                     {buttons.map((button) => (
                         <React.Fragment key={button}>
                             <section>
-                                <button
+                                <muiButton
                                     onClick={() => handleClick(button)} 
                                     className={`rounded-full px-2 py-1 text-black shadow mx-1 my-1 ${(activeButtons[button] === true)? 'bg-blue-500' : 'bg-white'}`}>
                                     {button}
-                                </button>
+                                </muiButton>
                             </section>
                         </React.Fragment>
                     ))}
@@ -100,6 +101,9 @@ const GalleryBox = () => {
                                         return index < Object.values(image.tags).length - 1 ? `${tag}, ` : tag;
                                     })}
                                 </span>
+                            }
+                            subtitle={
+                                <span>{image.time}</span>
                             }
                             position="bottom"
                         />

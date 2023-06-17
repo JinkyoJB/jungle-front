@@ -4,12 +4,13 @@ import Editingbox2 from "../../components/Editor/Editingbox2";
 
 
 //components
-import MenuBar from "../../components/Editor/MenuBarR";
+import MenuBar from "./MenuBarL";
 
 
 function Editor2() {
     return (
         <div className="edit">
+            {/* <Menubar/> */}
             <Editingbox2/>
             {/* <MenuBar /> */}
         </div>

@@ -15,7 +15,7 @@
 
 import axios from "axios";
 
-const client = axios.create({ baseURL : 'http://43.201.112.156:4000'})
+const client = axios.create({ baseURL : 'http://localhost:4000'})
 
 export const request = ({ ...options}) => {
     client.defaults.headers.common.Authorization = `Bearer token`
@@ -23,5 +23,5 @@ export const request = ({ ...options}) => {
     const onError = error => {
         return error
     }
-    return client(options).then(onSuccess).catch(onError)
+    return client({...options, withCredentials: true}).then(onSuccess).catch(onError)
 }

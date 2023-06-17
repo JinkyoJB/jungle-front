@@ -148,7 +148,7 @@
         "x": 400,
         "y": 200
       },
-      "type" : "default",
+      "type": "default",
       "width": 150,
       "height": 40,
       "data": {
@@ -161,7 +161,7 @@
         "x": 400,
         "y": 400
       },
-      "type" : "default",
+      "type": "default",
       "width": 150,
       "height": 40,
       "data": {
@@ -171,9 +171,30 @@
   ],
   "edges": [
     {
-      "id" : "e1-2",
-      "source" : "1",
-      "target" : "2"
+      "id": "e1-2",
+      "source": "1",
+      "target": "2"
+    }
+  ],
+  "project": [
+    {
+      "id": "kungs-project"
+    },
+    {
+      "name": "Hodee",
+      "id": "kVrHVT7"
+    },
+    {
+      "name": "hodee project",
+      "id": "Mn85WNT"
+    },
+    {
+      "name": "theeeee",
+      "id": "CAGq9v9"
+    },
+    {
+      "name": "할로 ",
+      "id": "U_u_4T0"
     }
   ]
 }

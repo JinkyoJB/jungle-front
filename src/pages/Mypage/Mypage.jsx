@@ -3,13 +3,13 @@ import * as React from 'react';
 //components
 import Header from "../../components/mypage/Header"
 import Sidebar from "../../components/mypage/Sidebar"
-import ImgInputContainer from "../../components/mypage/ImgInputArea"
 import GalleryArea from '../../components/mypage/GalleryArea';
+import ImgFileInput from '../../components/mypage/ImgFileInput'
 
 function Mypage() {
   return (
     <div className="Mypage">
-      <ImgInputContainer />
+      <ImgFileInput/>
       <GalleryArea />
       <Sidebar />
       <Header />

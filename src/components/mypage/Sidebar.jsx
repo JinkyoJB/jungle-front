@@ -39,7 +39,7 @@ const Sidebar = () => {
         <SideContainer>
             <div className="top-16 h-full w-400 bg-gray-900">
                 <div className="p-4">
-                    <div className="text-white text-lg mb-4">좋아하는 포도 리스트</div>
+                    <div className="text-white text-lg mb-4">My image</div>
                         <div>
                             {likePhodo?.data?.map(like => {
                                 return (
@@ -55,11 +55,11 @@ const Sidebar = () => {
 
                 <hr className="border-gray-700" />
                 <div className="p-4">
-                    <div className="text-white text-lg mb-4">Template List</div>
+                    <div className="text-white text-lg mb-4">Project List</div>
                 </div>
                 <hr className="border-gray-700" />
                 <div className="p-4">
-                    <div className="text-white text-lg mb-4">Icon List</div>
+                    <div className="text-white text-lg mb-4">My research</div>
                     {/* Add icon list content */}
                 </div>
             </div>

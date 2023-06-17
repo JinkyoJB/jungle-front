@@ -2,7 +2,6 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
@@ -27,7 +26,7 @@ const MainFeaturedPost =() => {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundImage: `url(${post.image})`,
-        margin: '20px 40px',
+        margin: '30px 40px  20px 40px',
         borderRadius: '20px'
       }}
     >

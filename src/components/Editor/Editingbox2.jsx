@@ -41,6 +41,11 @@ export const useStore = create(set => ({
   setProjectId: (id) => set({ projectId: id }),
 }));
 
+//🐬 웹 알티시 테스팅
+const proOptions = {
+  account: 'paid-pro',
+  hideAttribution: true,
+};
 
 const flowKey = 'example-flow';
 const nodeTypes = {textUpdater: TextUpdaterNode, 
@@ -103,7 +108,7 @@ const initialEdges =
 //////////////////
 const Editingbox2 = () => {
    //🔥 Adding Node!
-  const reactFlowWrapper = useRef(null);
+  const reactFlowWrapper = useRef(null); // useRef
   const connectingNodeId = useRef(null);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -134,20 +139,24 @@ const onDrop = useCallback(
     event.preventDefault();
 
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    
+    //🐤 여기서 아무래도 current 세팅을 해주는 것 같은 데 확인 해봐야할 것 같음
     const type = event.dataTransfer.getData('application/reactflow');
     const img = event.dataTransfer.getData('data/imageurl');
+    console.log('🌲Getting type ', type); // 🍎 drag start에서 가져온 type
+    console.log('🌲Getting image ', img); // 🍎 drag start에서 가져온 image
 
-    console.log('🌲Getting data ', type)
-
-    // check if the dropped element is valid
+    //🥰 타입 확인 하기
     if (typeof type === 'undefined' || !type) {
       return;
     }
 
+    //🌸 position 확인하기 새로 떨어뜨, react flow의 인스턴스를 사용
     const position = reactFlowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
+
     const newNode = {
       id: getNodeId(),
       type,
@@ -155,7 +164,8 @@ const onDrop = useCallback(
       data: { label: `${type} node` , url: `${img}`},
     };
 
-    setNodes((nds) => nds.concat(newNode));
+    setNodes((nds) => nds.concat(newNode)); //🌸 webrtc 전에 있는 코드, 개인 편집
+    
   },
   [reactFlowInstance]
 );
@@ -294,6 +304,7 @@ const onConnectEnd = useCallback(
       onInit={setReactFlowInstance}
       onDrop={onDrop}
       onDragOver={onDragOver}
+      proOptions={proOptions}
       nodeTypes={nodeTypes}
       style= {{background : '#F3B0C3'}} // Mint!
       // style= {{background : '#00008B'}} //

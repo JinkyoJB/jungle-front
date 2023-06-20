@@ -40,6 +40,7 @@ const Editingbox4 = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   
+  //🔥 여기까지 노드와 엣지의 기존에 있는 것들을 받아오기
   useEffect(() => {
     axios.get('http://localhost:4000/nodes')
     .then((res) => {
@@ -51,7 +52,7 @@ const Editingbox4 = () => {
     });
   }, []);
 
-   
+  //🔥 여기까지 노드와 엣지의 기존에 있는 것들을 받아오기
   useEffect(() => {
     axios.get('http://localhost:4000/edges')
     .then((res) => {
@@ -128,6 +129,7 @@ const onConnectEnd = useCallback(
      console.log('only edge data: ', flow.edges);
      // console.log(localStorage)
      console.log('sending: ', {'nodes': flow.nodes})
+     
      axios.post('http://localhost:4000/nodes', {
         "nodes": flow.nodes
      }).then((res , err) => {

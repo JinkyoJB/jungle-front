@@ -129,6 +129,7 @@ const onConnectEnd = useCallback(
      console.log('only edge data: ', flow.edges);
      // console.log(localStorage)
      console.log('sending: ', {'nodes': flow.nodes})
+     
      axios.post('http://localhost:4000/nodes', {
         "nodes": flow.nodes
      }).then((res , err) => {

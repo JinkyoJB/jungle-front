@@ -1,9 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 
 import { Box, Typography, TextField, MenuItem } from '@mui/material';
 import useNodesStateSynced, { nodesMap } from '../../../hooks/useNodesStateSynced';
-import useEdgesStateSynced from '../../../hooks/useEdgesStateSynced';
-
+import useEdgesStateSynced, { edgesMap } from '../../../hooks/useEdgesStateSynced';
+import { Button } from "@material-tailwind/react"
+import {useStore } from "./../Editingbox2"
+import axios from 'axios';
+import { request } from "../../../utils/axios-utils"
 
 
 function Nodechangebar(){
@@ -12,7 +15,21 @@ function Nodechangebar(){
   // 🔥 요래요래 이것들은 굳이 안 바꿔도 될 것 같습니다만
   // const [nodes, onNodesChange, setNodes] = useNodesStateSynced();
   // const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
+  // const {onSave} = useStore();
+  // 🍁 Nodes Map을 이용해서 현재 노드를 다 불러오는 방법 
 
+
+  const onSave = useCallback(() => {
+    const nodes = Array.from(nodesMap.values());
+    const edges = Array.from(edgesMap.values());
+    console.log(nodes);
+    console.log(edges);
+    // 먼저 노드들 보내기
+    // axios.post
+
+  })
+
+  
   useEffect(() => {
     // This is your map iteration code 
     nodesMap.forEach((node, nodeId) => {
@@ -57,6 +74,7 @@ function Nodechangebar(){
       }}
     />
     </Box>
+      <Button type="button" onClick={onSave} > 저장 </Button>
         </Box>
         </Box>
 

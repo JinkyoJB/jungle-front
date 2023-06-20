@@ -1,36 +1,35 @@
+import React, { useEffect, useState, useRef , useCallback } from 'react';
 // import style sheets
 import 'reactflow/dist/style.css';
-
 import './index.css';
-// import Node Types
+
+// 🍀 import Node Types
 import TextNode from './Node/TextNode';
 import PictureNode from './Node/PictureNode.js';
 
-// import Component
+// 🍀 import Component
 import Modal from './Modal';
-
-// 🍀 WebRTC setting
-import useNodesStateSynced, { nodesMap } from '../../hooks/useNodesStateSynced';
-import useEdgesStateSynced from '../../hooks/useEdgesStateSynced';
-
-// import React 
-import React, { useEffect, useState, useRef , useCallback } from 'react';
 import Sidebar from '../Editor/SideBar/Sidebar';
 import MenuBarR from "../../components/Editor/MenuBarR";
 
+// 🍀 WebSocket Node 
+import useNodesStateSynced, { nodesMap } from '../../hooks/useNodesStateSynced';
+import useEdgesStateSynced from '../../hooks/useEdgesStateSynced';
 
-// import React Flow 
+// 🍀 React Flow 
 import ReactFlow, {
   ReactFlowProvider, useNodesState, useEdgesState, addEdge,useReactFlow, Panel, Controls,
   MiniMap, NodeToolbar } from 'reactflow';
 
-// import zustand
+// 🍀 Zustand 모달창에서 받아오는 것
 import {create} from 'zustand';
 
-// define the store
-export const useStore = create(set => ({
+
+// 🐬 프로젝트 아이디 받을려면 이것을 가져와야한다
+export const useStore = create((set,get) => ({
   projectId: null,
   setProjectId: (id) => set({ projectId: id }),
+  rfInstance: null,
 }));
 
 //🐬 웹 알티시 테스팅
@@ -39,24 +38,19 @@ const proOptions = {
   hideAttribution: true,
 };
 
-const flowKey = 'example-flow';
+const flowKey = 'example-flow'; //🧞‍♂️ 이거 뭐지? 굳이 필요하나?
+
 const nodeTypes = {TextNode: TextNode, 
                   pix: PictureNode,
                 }
 
-// 적어도 100개는 만들지 않을거 아니야 ~ 
-let id = 100; 
+//🐬 새로 생기는 노드 Id 설정
+let id = 10; 
 const getNodeId = () => `${id++}`;
 const fitViewOptions = {
    padding: 3,
  };
 
-//////////////////
-  // 🍀🌼 기존에 드래그와 동일, 근데 기존은 그냥 컴포넌트 밖에다 세팅이 되어있음
-  // const onDragOver = useCallback((event) => {
-  //   event.preventDefault();
-  //   event.dataTransfer.dropEffect = 'move';
-  // }, []);
 
 const Editingbox2 = () => {
    
@@ -64,20 +58,26 @@ const Editingbox2 = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   
   //🍀 webrtc 세팅 : 및 파일에서 함수 빼오기
-  const [nodes, onNodesChange ] = useNodesStateSynced();
+  const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { project, setViewport } = useReactFlow();
 
-  //🍊 Label 세팅하기 
-  // const [nodeName, setNodeName] = useState("Node 1")
+  //🍎 Saving 해놓기 위한 준비 작업
+  const [rfInstance, setRfInstance] = useState(null);
 
-  // 🌼 기존 세팅: 엣지 새로 생성
-  // const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  const onSave = useCallback(() => {
+    if (rfInstance){
+      const flow = rfInstance.toObject();
+      localStorage.setItem(flowKey, JSON.stringify(flow));
 
-  // 🌼 기존 세팅: 노드끌어서 생성, 첫 시작
-  //   const onConnectStart = useCallback((_, {nodeId}) => {
-  //    connectingNodeId.current = nodeId;
-  // }, []);
+      //🌵 Console Testing
+      console.log(JSON.stringify(flow));
+      console.log('flow: ', flow);
+      console.log('only node data: ', flow.nodes);
+      console.log('only edge data: ', flow.edges);
+    }
+  }, [rfInstance]);
+
 
   // 🍀🌼 기존에 드래그와 동일, 근데 기존은 그냥 컴포넌트 밖에다 세팅이 되어있음
   const onDragOver = useCallback((event) => {
@@ -85,7 +85,7 @@ const Editingbox2 = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  //DragStart 후 편집창에 데이터 input하는 부분!
+  // 🍀🌼 DragStart 후 편집창에 데이터 input하는 부분!
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -137,7 +137,7 @@ const Editingbox2 = () => {
       onConnect={onConnect}
       // onConnectStart={onConnectStart}
       // onConnectEnd={onConnectEnd}
-      // onInit={setReactFlowInstance}
+      onInit={setRfInstance} 
       onDrop={onDrop}
       onDragOver={onDragOver}
       proOptions={proOptions}
@@ -160,7 +160,7 @@ const Editingbox2 = () => {
 
 export default () => (
   <>
-  {/* <Modal/> */}
+  <Modal/>
   <ReactFlowProvider>
     <Editingbox2 />
   </ReactFlowProvider>

@@ -30,7 +30,12 @@ export const useStore = create((set,get) => ({
   projectId: null,
   setProjectId: (id) => set({ projectId: id }),
   rfInstance: null,
+  // 🍀 배경색 하나 바기 
+  initBgColor: '#F3B0C3',
+  setBgColor: (color) => set({initBgColor: color})
 }));
+
+
 
 //🐬 웹 알티시 테스팅
 const proOptions = {
@@ -53,8 +58,10 @@ const fitViewOptions = {
  };
 
 
+
+
 const Editingbox2 = () => {
-   
+  const { initBgColor } = useStore();
   const reactFlowWrapper = useRef(null); // 큰 react flow wrapper
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   
@@ -65,20 +72,6 @@ const Editingbox2 = () => {
 
   //🍎 Saving 해놓기 위한 준비 작업
   const [rfInstance, setRfInstance] = useState(null);
-
-  // const onSave = useCallback(() => {
-  //   if (rfInstance){
-  //     const flow = rfInstance.toObject();
-  //     localStorage.setItem(flowKey, JSON.stringify(flow));
-
-  //     //🌵 Console Testing
-  //     console.log(JSON.stringify(flow));
-  //     console.log('flow: ', flow);
-  //     console.log('only node data: ', flow.nodes);
-  //     console.log('only edge data: ', flow.edges);
-  //   }
-  // }, [rfInstance]);
-
 
   // 🍀🌼 기존에 드래그와 동일, 근데 기존은 그냥 컴포넌트 밖에다 세팅이 되어있음
   const onDragOver = useCallback((event) => {
@@ -143,7 +136,7 @@ const Editingbox2 = () => {
       onDragOver={onDragOver}
       proOptions={proOptions}
       nodeTypes={nodeTypes}
-      style= {{background : '#F3B0C3', position:'relative'}} // Mint!
+      style= {{background : initBgColor, position:'relative'}} // Mint!
       // style= {{background : '#00008B'}} //
       // onInit={setRfInstance}
       fitView

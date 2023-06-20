@@ -8,22 +8,22 @@ function TextNode({ data, isConnectable }) {
   }, []);
 
   return (
-    <div className="textNode bg-white px-5 py-2 rounded-lg">
-      <Handle type="target" position={Position.Top} id="top" isConnectable={isConnectable} />
-      <Handle type="target" position={Position.Left} id="left" isConnectable={isConnectable} />
-      <div>
-        <label htmlFor="text">{data.label}</label>
-      </div>
-      <Handle type="source" position={Position.Right} id="right" isConnectable={isConnectable} />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottom"
-        // style={handleStyle}
-        isConnectable={isConnectable}
-      />
-      
-    </div>
+<div className="textNode bg-white px-1 py-2 rounded-lg border-2 border-black w-48 h-16 flex items-center justify-center">
+  <Handle type="target" position={Position.Top} id="top" isConnectable={isConnectable} />
+  <Handle type="target" position={Position.Left} id="left" isConnectable={isConnectable} />
+  <div className="flex items-center justify-center">
+    <label htmlFor="text">{data.label}</label>
+  </div>
+  <Handle type="source" position={Position.Right} id="right" isConnectable={isConnectable} />
+  <Handle
+    type="source"
+    position={Position.Bottom}
+    id="bottom"
+    isConnectable={isConnectable}
+  />
+</div>
+
+
   );
 }
 

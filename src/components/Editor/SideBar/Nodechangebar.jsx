@@ -13,6 +13,7 @@ function Nodechangebar(){
 
   const [nodeName, setNodeName] = useState("노드 이름 바꾸기");
   const {projectId, setBgColor} = useStore();
+  
   // 🔥 요래요래 이것들은 굳이 안 바꿔도 될 것 같습니다만
   // const [nodes, onNodesChange, setNodes] = useNodesStateSynced();
   // const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
@@ -50,8 +51,6 @@ function Nodechangebar(){
     })
 }, [nodesMap, edgesMap, projectId, API.NODES, API.EDGES]);
 
-
-  
   useEffect(() => {
     // This is your map iteration code 
     nodesMap.forEach((node, nodeId) => {

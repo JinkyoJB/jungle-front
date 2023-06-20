@@ -58,8 +58,6 @@ const fitViewOptions = {
  };
 
 
-
-
 const Editingbox2 = () => {
   const { initBgColor } = useStore();
   const reactFlowWrapper = useRef(null); // 큰 react flow wrapper

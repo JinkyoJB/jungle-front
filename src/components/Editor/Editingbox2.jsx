@@ -63,10 +63,13 @@ const Editingbox2 = () => {
   const reactFlowWrapper = useRef(null); // 큰 react flow wrapper
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   
-  //🍀 webrtc 세팅
-  const [nodes, onNodesChange] = useNodesStateSynced();
+  //🍀 webrtc 세팅 : 및 파일에서 함수 빼오기
+  const [nodes, onNodesChange ] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { project, setViewport } = useReactFlow();
+
+  //🍊 Label 세팅하기 
+  // const [nodeName, setNodeName] = useState("Node 1")
 
   // 🌼 기존 세팅: 엣지 새로 생성
   // const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
@@ -121,7 +124,6 @@ const Editingbox2 = () => {
     //🌼 webrtc 전에 있는 코드, 개인 편집
     // [reactFlowInstance]
   );
-
 
 
   return (

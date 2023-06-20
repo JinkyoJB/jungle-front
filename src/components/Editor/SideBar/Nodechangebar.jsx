@@ -1,11 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { Box, Typography, TextField, MenuItem } from '@mui/material';
+import useNodesStateSynced, { nodesMap } from '../../../hooks/useNodesStateSynced';
+import useEdgesStateSynced from '../../../hooks/useEdgesStateSynced';
+
 
 
 function Nodechangebar(){
 
-  const [nodeName, setNodeName] = useState("Node 1");
+  const [nodeName, setNodeName] = useState("노드 이름 바꾸기");
+  // 🔥 요래요래 이것들은 굳이 안 바꿔도 될 것 같습니다만
+  // const [nodes, onNodesChange, setNodes] = useNodesStateSynced();
+  // const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
+
+  useEffect(() => {
+    // This is your map iteration code 
+    nodesMap.forEach((node, nodeId) => {
+      if (node.selected === true) {
+        node.data = {
+            ...node.data,
+            label: nodeName
+        };
+        nodesMap.set(nodeId, node);
+      }
+    });
+  }, [nodeName, nodesMap]);
+
     return (
         <Box display="flex" justifyContent="center" alignItems="center" sx={{ padding: '5px' }}> 
         <Box sx={{ width: '75%' }}>

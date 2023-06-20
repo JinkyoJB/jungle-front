@@ -86,7 +86,7 @@ export default () => {
         color: 'rgb(255,255,255)'}}>
       <MenuList dense>
         <MenuItem>
-          <Typography sx={{paddingRight: 3 }}>Side bar</Typography>
+          <Typography sx={{paddingRight: 3 }}>사이드 바</Typography>
         </MenuItem>
         
         <div> <TimeBar /> </div>

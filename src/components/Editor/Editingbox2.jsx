@@ -40,7 +40,8 @@ const proOptions = {
 
 const flowKey = 'example-flow'; //🧞‍♂️ 이거 뭐지? 굳이 필요하나?
 
-const nodeTypes = {TextNode: TextNode, 
+const nodeTypes = {
+                  TextNode: TextNode, 
                   pix: PictureNode,
                 }
 
@@ -65,18 +66,18 @@ const Editingbox2 = () => {
   //🍎 Saving 해놓기 위한 준비 작업
   const [rfInstance, setRfInstance] = useState(null);
 
-  const onSave = useCallback(() => {
-    if (rfInstance){
-      const flow = rfInstance.toObject();
-      localStorage.setItem(flowKey, JSON.stringify(flow));
+  // const onSave = useCallback(() => {
+  //   if (rfInstance){
+  //     const flow = rfInstance.toObject();
+  //     localStorage.setItem(flowKey, JSON.stringify(flow));
 
-      //🌵 Console Testing
-      console.log(JSON.stringify(flow));
-      console.log('flow: ', flow);
-      console.log('only node data: ', flow.nodes);
-      console.log('only edge data: ', flow.edges);
-    }
-  }, [rfInstance]);
+  //     //🌵 Console Testing
+  //     console.log(JSON.stringify(flow));
+  //     console.log('flow: ', flow);
+  //     console.log('only node data: ', flow.nodes);
+  //     console.log('only edge data: ', flow.edges);
+  //   }
+  // }, [rfInstance]);
 
 
   // 🍀🌼 기존에 드래그와 동일, 근데 기존은 그냥 컴포넌트 밖에다 세팅이 되어있음

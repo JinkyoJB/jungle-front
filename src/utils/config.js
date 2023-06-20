@@ -13,4 +13,6 @@ export const API = {
   MYPAGE: `${BASE_URL}/mypage`,
   CHANGEPW: `${BASE_URL}/reset`,
   NPROJECT: `${BASE_URL}/project`,
+  NODES: `${BASE_URL}/nodes`,
+  EDGES: `${BASE_URL}/edges`,
 };

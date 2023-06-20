@@ -7,11 +7,12 @@ import { Button } from "@material-tailwind/react"
 import {useStore } from "./../Editingbox2"
 import axios from 'axios';
 import { request } from "../../../utils/axios-utils"
-
+import {API} from "../../../utils/config";
 
 function Nodechangebar(){
 
   const [nodeName, setNodeName] = useState("노드 이름 바꾸기");
+  const {projectId} = useStore();
   // 🔥 요래요래 이것들은 굳이 안 바꿔도 될 것 같습니다만
   // const [nodes, onNodesChange, setNodes] = useNodesStateSynced();
   // const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
@@ -22,12 +23,29 @@ function Nodechangebar(){
   const onSave = useCallback(() => {
     const nodes = Array.from(nodesMap.values());
     const edges = Array.from(edgesMap.values());
-    console.log(nodes);
-    console.log(edges);
+    console.log('nodes: ', nodes);
+    console.log('edges: ', edges);
+    console.log('Id: ', projectId);
     // 먼저 노드들 보내기
-    // axios.post
+    axios.post(`${API.NODES}/${projectId}`, {
+      "nodes" : nodes
+    }).then((res , err) => {
+      if (res.status === 200) {
+         console.log('nodes saved');
+      }
+      else {console.log(err)}
+    })
 
-  })
+    axios.post(`${API.EDGES}/${projectId}`, {
+      "edges" : edges
+    }).then((res , err) => {
+      if (res.status === 200) {
+         console.log('edges saved');
+      }
+      else {console.log(err)}
+    })
+}, [nodesMap, edgesMap, projectId, API.NODES, API.EDGES]);
+
 
   
   useEffect(() => {

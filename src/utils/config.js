@@ -1,5 +1,8 @@
 //백엔드 서버
-const BASE_URL = 'http://43.201.112.156:4000';
+//const BASE_URL = 'http://43.201.112.156:4000';
+
+//현태
+const BASE_URL = 'https://hyeontae.shop';
 
 //json server 등 연결
 // const BASE_URL = 'http://localhost:4000';

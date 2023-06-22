@@ -1,53 +1,13 @@
 const express = require('express'); 
 const SocketIO = require("socket.io");
-// const http = require("http");
+const http = require("http");
 
 const PORT = 3002;
 const app = express(); //socket-http용
-const cors = require('cors');
-// const httpServer = http.createServer(app); //socket용
-// const wsServer = SocketIO(httpServer); //socket용
 
+const httpServer = http.createServer(app); //socket용
+const wsServer = SocketIO(httpServer); //socket용
 
-/* ------------- ---------  socket 코드  ---  -------------------------- */
-
-var fs = require('fs');
-var https = require('https');
-
-var options = {
-  key:fs.readFileSync('../certificate/key.pem'),
-  cert: fs.readFileSync('../certificate/cert.pem')
-};
-
-// CORS 옵션 설정
-const corsOptions = {
-  origin: 'https://phodo.store', // 클라이언트 도메인을 명시적으로 지정하면 보안 상의 이유로 해당 도메인만 요청 허용 가능
-  methods: 'GET, POST',
-  allowedHeaders:  [
-    "Content-Type",
-    "Content-Length",
-    "Accept-Encoding",
-    "X-CSRF-Token",
-    "Authorization",
-    "accept",
-    "origin",
-    "Cache-Control",
-    "X-Requested-With"
-  ],  
-  credentials : true
-};
-
-app.use(cors(corsOptions))
-
-var server = https.createServer(options, app);
-
-const wsServer = SocketIO(server, {
-  cors : corsOptions
-}); //socket용
-
-
-
-/* ------------- ---------  위는 js 코드  ---  -------------------------- */
 
 /* ------------- ---------  socket 코드  ---  -------------------------- */
 // app.set("view engine", "pug"); //브라우저 보여주는 sorce코드 
@@ -77,6 +37,7 @@ const MAXIMUM = 5;
 wsServer.on("connection", (socket) => {
   let myRoomName = null;
   let myNickname = null;
+  console.log(myRoomName, myNickname)
 
   socket.on("join_room", (roomName, nickname) => {
     myRoomName = roomName;
@@ -168,5 +129,6 @@ wsServer.on("connection", (socket) => {
 //   console.log(`Server started on port ${PORT}`);
 // });
 
-server.listen(PORT,() => {
+httpServer.listen(PORT,() => {
     console.log(`Server started on port ${PORT}`)});
+

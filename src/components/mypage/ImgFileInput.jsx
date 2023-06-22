@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useMutation } from 'react-query';
 import React, { useState } from 'react';
-import styled from 'styled-components'
 //서버요청용
 import { request } from "../../utils/axios-utils"
 

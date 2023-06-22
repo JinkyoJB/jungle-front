@@ -38,6 +38,9 @@ rm package-lock.json yarn.lock
 npm cache clean -f
 npm install
 
+//🍺음성채팅용
+yarn add cors express nodemon socket.io
+
 // 호준이 꺼
 //npm install @tanstack/react-query
 //npm install @tanstack/react-query-devtools

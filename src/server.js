@@ -2,7 +2,7 @@ const express = require('express');
 const SocketIO = require("socket.io");
 const http = require("http");
 
-const PORT = 3001;
+const PORT = 3002;
 const app = express(); //socket-http용
 
 const httpServer = http.createServer(app); //socket용

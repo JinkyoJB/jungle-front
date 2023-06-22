@@ -16,7 +16,7 @@ const VoiceChat = () => {
   useEffect(() => {
     console.log("check render")
     {/*🌿 클라이언트 측에서 Socket.IO를 사용하여 '3001'서버와 클라이언트 소켓 연결을 설정하는 부분 */}
-    socketRef.current = io("https://localhost:3002/", { transports: ['websocket'] });  
+    socketRef.current = io("wss://phodo.store/vc");  
     // socketRef.current = io("https://hyeontae.shop", { transports: ['websocket'] });  //socketRef에 현재 
 
     {/*🌿 연결이 안됐으면, 콘솔창에 에러 띄우기 */}

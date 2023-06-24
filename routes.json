@@ -1,5 +1,5 @@
 {
-  "/api/likephodo": "/likephodo",
+  "/api/project": "/project",
   "/api/gallery": "/gallery",
   "/api/galleryTags": "/galleryTags",
   "/:resource/:id/show": "/:resource/:id",

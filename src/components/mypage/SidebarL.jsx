@@ -9,19 +9,19 @@ import { Divider } from '@mui/material';
 
 //서버용 코드
 const fetchLikePhodo = () => {
-  return request({ url: 'api/likephodo'})
+  return request({ url: ''})
 }
 
 const Sidebar = () => {
     // useQuery를 사용하여 fetchLikePhoto 함수를 호출하고, 그 결과를 콘솔에 출력
-    const { data: likePhodo, isLoading: likeLoading, isError: likeIsError, error: likeError, isFetching } = useQuery('likePhodo', fetchLikePhodo,{
+    // const { data: likePhodo, isLoading: likeLoading, isError: likeIsError, error: likeError, isFetching } = useQuery('likePhodo', fetchLikePhodo,{
         // onSuccess: (likePhodo) => {console.log('sidebar get success', likePhodo)},
         // retry:5,
         // retryDelay:500,
         // staleTime:1000*60,
         // cacheTime:1000*300,
         // refetchOnWindowFocus:true
-    });
+    // });
     // const { data: lastPhodo, isLoading:lastLoad, isError:lastIsError, error:lastError } = useQuery('lastPhoto', fetchLastPhodo);
 
     // if (likeLoading || isFetching ){return <h2>Loading...</h2>}
@@ -40,7 +40,7 @@ const Sidebar = () => {
             <div className="p-4">
                 <div className=" text-lg mb-4">My image</div>
                     <div>
-                        {likePhodo?.data?.map(like => {
+                        {/* {likePhodo?.data?.map(like => {
                             return (
                                 <div key={like.id}>
                                     <h2>
@@ -48,7 +48,7 @@ const Sidebar = () => {
                                     </h2>
                                 </div>
                             )
-                        })}
+                        })} */}
                     </div>
             </div>
             <div className='mx-4'>

@@ -311,13 +311,13 @@ const GalleryBox = () => {
                         }}
                     />
                     <ImageListItemBar
-                        title={
-                            <span className='flex'>
-                                {image.category.slice(0,2).map((category, index) => {
-                                    return index < 1 ? <p key={index}> {category },  </p> : <p>{ category} </p>;
-                                })}
-                            </span>
-                        }
+                        // title={
+                        //     <span className='flex'>
+                        //         {image.category.slice(0,2).map((category, index) => {
+                        //             return index < 1 ? <p key={index}> {category },  </p> : <p>{ category} </p>;
+                        //         })}
+                        //     </span>
+                        // }
                         subtitle={
                             <span>{formatData(image.time)}</span>
                         }

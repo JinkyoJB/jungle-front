@@ -48,7 +48,6 @@ const Editingbox2 = () => {
    * 🐬 Ydoc 세팅 
    * */
   
-  console.log('projectId : ', projectId)
   // 🐬 ydocument 생성
   const ydoc = new Doc();
   console.log('ydoc created : ', ydoc)
@@ -61,7 +60,9 @@ const Editingbox2 = () => {
     projectId, // 🔥 프로젝트 아이디
     ydoc
   );
+  console.log('wsprovider created : ', wsProvider);
 
+  useEffect(() => {
   wsProvider.on('status', event => {
     console.log(event);
     console.log(event.status);
@@ -75,7 +76,7 @@ const Editingbox2 = () => {
     } else if (event.status === "connected") {
       reconnectionAttempts = 0; // Reset the counter on successful connection
     }
-  })
+  })}, []);
 
 
   const nodesMap = ydoc.getMap('nodes');

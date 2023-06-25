@@ -20,6 +20,7 @@ import { useEdgesStateSynced } from '../../hooks/useEdgesStateSynced';
 import  VoiceChat  from './Voice/VoiceBar'
 
 import { useParams } from "react-router-dom";
+import { useStore } from './store';
 
 
 //🐬 과금버전 세팅
@@ -52,7 +53,12 @@ const Editingbox2 = () => {
   // 🐬 ydocument 생성
   const ydoc = new Doc();
   console.log('ydoc created : ', ydoc)
-
+  // Use store to set ydoc
+  const { setYdoc } = useStore();
+  useEffect(() => {
+    setYdoc(ydoc);
+  }, [ydoc, setYdoc]);
+  
   let reconnectionAttempts = 0;
   const MAX_RECONNECTION_ATTEMPTS = 5; // Set your limit
 

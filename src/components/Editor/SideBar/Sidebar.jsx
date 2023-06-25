@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography';
 import GallerySearch from './GallerySearch';
 import TimeBar from './TimeBar';
 import TagButtons from './TagButtons';
+import Nodechangebar from './Nodechangebar';
 
 const fetchGallery = () => {
   return request({ url: 'api/gallery' });
@@ -45,19 +46,6 @@ export default () => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.setData('data/imageurl', imageURL);
     event.dataTransfer.setData('data/tags', tags);
-    
-    // const afterData = event.dataTransfer.getData('application/reactflow');
-    // const afterimg = event.dataTransfer.getData('data/imageurl');
-    // const afterTags = event.dataTransfer.getData('data/tags');
-    // console.log('🍎 after drag event: ', event.dataTransfer);
-    
-    // afterData = event.dataTransfer.getData('application/reactflow');
-    // const afterimg = event.dataTransfer.getData();
-    // console.log('👺 after data: ', afterData);
-    // console.log('👺 after data: ', event.dataTransfer);
-    // console.log('🌵 after img: ', afterimg);
-    // console.log('🌵 afterTags: ', afterTags);
-    
     event.dataTransfer.effectAllowed = 'move';
   }
 
@@ -113,6 +101,7 @@ export default () => {
             Text Node
           </div>
         </MenuItem>  
+        <Nodechangebar/>
          </MenuList>
         </Paper>
     </div>

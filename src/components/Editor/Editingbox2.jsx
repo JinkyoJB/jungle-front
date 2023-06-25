@@ -42,46 +42,7 @@ const fitViewOptions = {
  };
 
 
-const Editingbox2 = () => {
-  const {projectId} = useParams();
-  /* * 
-   * 🐬 Ydoc 세팅 
-   * */
-  
-  // 🐬 ydocument 생성
-  const ydoc = new Doc();
-  console.log('ydoc created : ', ydoc)
-
-  let reconnectionAttempts = 0;
-  const MAX_RECONNECTION_ATTEMPTS = 5; // Set your limit
-
-  const wsProvider = new WebsocketProvider(
-    'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
-    projectId, // 🔥 프로젝트 아이디
-    ydoc
-  );
-  console.log('wsprovider created : ', wsProvider);
-
-  useEffect(() => {
-  wsProvider.on('status', event => {
-    console.log(event);
-    console.log(event.status);
-    if (event.status === "disconnected") {
-      reconnectionAttempts++;
-      
-      if (reconnectionAttempts > MAX_RECONNECTION_ATTEMPTS) {
-        console.log("Max reconnection attempts reached");
-        wsProvider.disconnect(); // Disconnect the provider
-      }
-    } else if (event.status === "connected") {
-      reconnectionAttempts = 0; // Reset the counter on successful connection
-    }
-  })}, []);
-
-
-  const nodesMap = ydoc.getMap('nodes');
-  const edgesMap = ydoc.getMap('edges');
-
+const Editingbox2 =({ ydoc, nodesMap, edgesMap }) => {
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced(ydoc);
   const [nodes, onNodesChange] = useNodesStateSynced(ydoc, edgesMap);
 
@@ -184,10 +145,4 @@ const Editingbox2 = () => {
   );
 };
 
-export default () => (
-  <>
-  <ReactFlowProvider>
-    <Editingbox2 />
-  </ReactFlowProvider>
-  </>
-);
+export default Editingbox2;

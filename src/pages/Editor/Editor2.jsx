@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import Header from '../../components/mypage/Header';
 import { useParams } from "react-router-dom";
-import Editingbox2 from "../../components/Editor/Editingbox2";
+// import Editingbox2 from "../../components/Editor/Editingbox2";
+import YjsDoc from "../../components/Editor/Ydoc";
 
 function Editor2() {
     const {projectId} = useParams();
@@ -12,8 +13,7 @@ function Editor2() {
     return (
         <div className="edit">
             <Header />
-            {/* {projectId} project created! */}
-            <Editingbox2 projectId={projectId}/>
+            <YjsDoc projectId={projectId} />
         </div>
     )
 }

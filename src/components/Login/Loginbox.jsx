@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API } from "../../utils/config";
 import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '../store'
 
 const Loginbox = () => {
     const navigate = useNavigate();
@@ -12,6 +13,9 @@ const Loginbox = () => {
     });
 
     const { email, password, error } = formData;
+
+    {/* 🌿 store에 있는 함수를 불러옵니다. */}
+    const setUserEmail = useUserStore(state => state.setUserEmail)
 
     // console.log(formData); //🔥 testing
     
@@ -32,6 +36,9 @@ const Loginbox = () => {
             if (res.status === 200) {
                 localStorage.setItem('userName', JSON.stringify(res.data.user.name));
                 localStorage.setItem('userEmail', JSON.stringify(res.data.user.email));
+                {/* 🌿 post 성공한다면 email값을 store에 저장합시다. */}
+                setUserEmail(formData.email)
+                
                 navigate('/Main');
             }
         })

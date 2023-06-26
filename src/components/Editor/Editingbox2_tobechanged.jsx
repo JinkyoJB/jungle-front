@@ -9,7 +9,6 @@ import './index.css';
 // 노드 타입
 import TextNode from './Node/TextNode';
 import PictureNode from './Node/PictureNode.js';
-
 // 리액트 플로우 노드 
 import ReactFlow, { ReactFlowProvider, useReactFlow, Controls, MiniMap} from 'reactflow';
 import { Doc } from 'yjs';
@@ -21,11 +20,9 @@ import { useEdgesStateSynced } from '../../hooks/useEdgesStateSynced';
 import  VoiceChat  from './Voice/VoiceBar'
 
 import { useParams } from "react-router-dom";
-import axios from 'axios';
-import * as awarenessProtocol from 'y-protocols/awareness.js'
 
 
-//🐬 웹 알티시 테스팅
+//🐬 과금버전 세팅
 const proOptions = {
   account: 'paid-pro',
   hideAttribution: true,
@@ -38,94 +35,65 @@ const nodeTypes = {
 };
 
 //🐬 노드 아이디 세팅
-let id = Math.floor(Math.random() * (10000 - 100 + 1)) + 100;
+let id = 100; 
 const getNodeId = () => `${id++}`;
-
 const fitViewOptions = {
    padding: 3,
  };
 
-   /* * 
-   * 🐬 Ydoc 세팅 
-   * */
-const ydoc = new Doc();
-
-const wsOpts = {
-  connect: false,
-  params: {},
-  awareness: new awarenessProtocol.Awareness(ydoc)
-};
 
 const Editingbox2 = () => {
-  const {projectId} = useParams();  
+  const {projectId} = useParams();
+  /* * 
+   * 🐬 Ydoc 세팅 
+   * */
   
+  console.log('projectId : ', projectId)
+  // 🐬 ydocument 생성
+  const ydoc = new Doc();
+  console.log('ydoc created : ', ydoc)
+
+  let reconnectionAttempts = 0;
+  const MAX_RECONNECTION_ATTEMPTS = 5; // Set your limit
 
   const wsProvider = new WebsocketProvider(
     'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
     projectId, // 🔥 프로젝트 아이디
-    ydoc, // 🔥 새롭게 전달 받을 도큐먼트 
-    wsOpts
+    ydoc
   );
+
+  wsProvider.on('status', event => {
+    console.log(event);
+    console.log(event.status);
+    if (event.status === "disconnected") {
+      reconnectionAttempts++;
+      
+      if (reconnectionAttempts > MAX_RECONNECTION_ATTEMPTS) {
+        console.log("Max reconnection attempts reached");
+        wsProvider.disconnect(); // Disconnect the provider
+      }
+    } else if (event.status === "connected") {
+      reconnectionAttempts = 0; // Reset the counter on successful connection
+    }
+  })
+
+
   const nodesMap = ydoc.getMap('nodes');
   const edgesMap = ydoc.getMap('edges');
 
-  useEffect(() => {
-    wsProvider.connect();
-    wsProvider.on('status', event => {
-      console.log(event);
-      console.log(event.status);
-      if (event.status === "connecting") {
-        console.log("Disconnected, stopping reconnection attempts");
-        wsProvider.disconnect(); // Stop the connection attempts
-      } else if (event.status === "connected") {
-        console.log("Successfully connected");
-      }
-    });
-      // 🌟 Fetch nodes from the API
-// 🌟 Fetch project data from the API
-  axios.get(`http://localhost:4000/project/${projectId}`)
-  // axios.get(`https://hyeontae.shop/project/${projectId}`)
-  .then((res) => {
-    const data = res.data; 
-    console.log(res.data);
-
-    // Check if nodes data exists and is an array
-    if (data.node && Array.isArray(data.node)) {
-      // Loop over nodes array and set each node in the nodesMap
-      data.node.forEach(node => {
-        if (node && node.id) {
-          nodesMap.set(node.id, node);
-        }
-      });
-    } else {
-      console.log("No nodes data received or it is not an array.");
-    }
-
-    // Check if edges data exists and is an array
-    if (data.edge && Array.isArray(data.edge)) {
-      // Loop over edges array and set each edge in the edgesMap
-      data.edge.forEach(edge => {
-        if (edge && edge.id) {
-          edgesMap.set(edge.id, edge);
-          console.log(edgesMap);
-        }
-      });
-    } else {
-      console.log("No edges data received or it is not an array.");
-    }
-  })
-  .catch((err) => console.error(err)); // Use console.error to log errors
-  }, []);
-  
-
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced(ydoc);
   const [nodes, onNodesChange] = useNodesStateSynced(ydoc, edgesMap);
+
+
 
   /* * 
    * 🐬 아니셜라이징 세팅
    * */
   
+
   const reactFlowWrapper = useRef(null); // 큰 react flow wrapper
+  
+  //🍀 webrtc 세팅
   
   const { project } = useReactFlow();
 
@@ -149,11 +117,12 @@ const Editingbox2 = () => {
       const tags = event.dataTransfer.getData('data/tags');
       console.log('🌲Getting type ', type); // 🍎 drag start에서 가져온 type
       console.log('🌲Getting image ', img); // 🍎 drag start에서 가져온 image 
+      //🥰 타입 확인 하기: 굳이 ? 
       if (typeof type === 'undefined' || !type) {
         return;
       }
 
-
+      //🌸 position 확인하기 새로 떨어뜨, react flow의 인스턴스를 사용
       const position = project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -166,9 +135,12 @@ const Editingbox2 = () => {
         data: { label: `${type}` , url: `${img}`, tags: `${tags}`},
       };
 
+      //🌼 webrtc 전에 있는 코드, 개인 편집
+      // setNodes((nds) => nds.concat(newNode)); 
       nodesMap.set(newNode.id, newNode);
     },
-    
+    //🌼 webrtc 전에 있는 코드, 개인 편집
+    // [reactFlowInstance]
   );
 
 
@@ -182,11 +154,16 @@ const Editingbox2 = () => {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
+      // onConnectStart={onConnectStart}
+      // onConnectEnd={onConnectEnd}
+      // onInit={setReactFlowInstance}
       onDrop={onDrop}
       onDragOver={onDragOver}
       proOptions={proOptions}
       nodeTypes={nodeTypes}
-      style= {{background : '#F3B0C3', position:'relative'}} 
+      style= {{background : '#F3B0C3', position:'relative'}} // Mint!
+      // style= {{background : '#00008B'}} //
+      // onInit={setRfInstance}
       fitView
       fitViewOptions={fitViewOptions}>
       <Controls position='top-left'/>

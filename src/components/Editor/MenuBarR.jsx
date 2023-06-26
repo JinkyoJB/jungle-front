@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 const MenuBar =() =>{
     return(
     <div>
-        <Paper sx={{width:'60px', position: 'fixed', top: '58px',right: 0, height: '100vh', borderRadius:0, justifyContent: 'center', backgroundColor:'#8F44AD' }}>
+        <Paper sx={{width:'60px', position: 'fixed', top: '64px',right: 0, height: '100vh', borderRadius:0, justifyContent: 'center', backgroundColor:'#8F44AD' }}>
             <MenuList>
                 <MenuItem>
                 <ListItemIcon>

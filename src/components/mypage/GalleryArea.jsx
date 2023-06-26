@@ -43,12 +43,9 @@ const GalleryBox = () => {
     {/* 🌿 갤러리에 렌더링 되는 데이터  */} 
     const [targetImgData, setTargetImgData] = useState('')
 
-    
-    {/* 🌿 사용 변수들- 갤러리 입력 관련 */}   
-    const formatData = useFormatDate();
-
     {/* 🌿 사용 변수들- 닐찌 입력 관련 */}  
     const [dates, setDates] = useState({ startDate: null, endDate: null }); 
+    const formatData = useFormatDate();
 
     {/* 🔴 사용 변수들- 중복선택 관련 , 사진 제거 관련 -> imgID기반 */}
     const [selectedImages, setSelectedImages] = useState([]);
@@ -57,7 +54,7 @@ const GalleryBox = () => {
     const selectRef = useRef();
     const detailTransfer = useDetailStore(state => state.changeRCImg);
     
-    {/* 🌿 사용 변수들- 닐찌 입력 관련 함수 */}  
+    {/* 🌿 사용 변수들- 닐짜 입력 관련 함수 */}  
     const handleValueChange = (newValue) => {
     console.log("newValue:", newValue);
     setDates({ startDate: newValue.startDate, endDate: newValue.endDate });
@@ -113,6 +110,7 @@ const GalleryBox = () => {
     {/* 🌿 init 버튼 클릭 -> 변수들 초기화 하는 함수 */}
     const initBtn = () => {
         setActiveBtns({});
+        setTargetImgData(initData);
         setDates({ startDate: null, endDate: null });
     }
 

@@ -4,5 +4,6 @@
   "/api/galleryTags": "/galleryTags",
   "/:resource/:id/show": "/:resource/:id",
   "/posts/:category": "/posts?category=:category",
-  "/articles\\?id=:id": "/posts/:id"
+  "/articles\\?id=:id": "/posts/:id",
+  "/project/:projectid" : "/existing"
 }

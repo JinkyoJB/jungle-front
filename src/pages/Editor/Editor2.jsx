@@ -1,19 +1,11 @@
-import React, {useEffect} from "react";
 import Header from '../../components/mypage/Header';
-import { useParams } from "react-router-dom";
 import Editingbox2 from "../../components/Editor/Editingbox2";
 
 function Editor2() {
-    const {projectId} = useParams();
-    useEffect(()=> {
-        console.log(projectId);
-    }, [projectId]);
-
     return (
         <div className="edit">
-            <Header />
-            {/* {projectId} project created! */}
-            <Editingbox2 projectId={projectId}/>
+            <Header className="fixed top-0 left-0 right-0" />
+            <Editingbox2/>
         </div>
     )
 }

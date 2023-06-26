@@ -26,11 +26,15 @@ function DetailShow() {
     console.log(inputRef.current.value)
   }
 
+
   {/* 🌿 변수들이 변하면 재렌더링을 위한 hook*/}
   useEffect(() => {
-    initTE({ Ripple });
-    console.log('detailshow에 전달받았습니다!!!', imageData)
-    },[imageData]);
+    if (imageData) {
+      initTE({ Ripple });
+      console.log('detailshow에 전달받았습니다!!!', imageData)
+    }
+  }, [imageData]);
+
 
   return (
     <div className=" mx-6 mb-20 p-4 pb-8 rounded-lg h-7/12 bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
@@ -52,12 +56,12 @@ function DetailShow() {
         카테고리: 
       </span>
           <span className="inline-block text-md">
-        {Object.values(imageData.categories).map((category, index) => (
+          {imageData.categories && Object.values(imageData.categories).map((category, index) => (
             <span key={index}>{category}{index < Object.values(imageData.categories).length - 1 ? ', ' : ''}</span>
         ))}
         </span>
       <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200 ">
-        태그들 : {Object.values(imageData.tags).map((tag, index) => (
+      태그들 : {imageData.tags && Object.values(imageData.tags).map((tag, index) => (
             <span key={index}>{tag}{index < Object.values(imageData.tags).length - 1 ? ', ' : ''}</span>
           ))}
       </p>
@@ -68,7 +72,7 @@ function DetailShow() {
         장소 : {imageData.location}
       </p>
     {/* 🌿 태그 추가 /삭제 */}
-    <div class="relative mt-2 flex w-fit h-4 flex-wrap justify-center item-center">
+    <div className="relative mt-2 flex w-fit h-4 flex-wrap justify-center item-center">
         <input
         type="text"
         className="relative -mr-0.5 -ml-2 block min-w-0 flex-auto rounded-md border border-solid border-neutral-300 bg-transparent bg-clip-padding px-5 py-2 text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-purple-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"

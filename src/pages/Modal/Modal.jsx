@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,7 +10,10 @@ import TextField from '@mui/material/TextField';
 import {request} from '../../utils/axios-utils'
 import { useNavigate } from 'react-router-dom';
 
+import { usePjtFromModalStore } from '../../components/store'
 
+
+{/* 🌿서버에 post보내는 함수 */}
 const postProject = (data) => {
     return request({url: 'project', method: 'POST', data })
   }
@@ -19,19 +22,27 @@ export const Modal = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(true);
     const [projectName, setProjectName] = useState("");
-    const [projectId, setProjectId] = useState(null);
+    // const [projectId, setProjectId] = useState(null);
 
-    
+    {/* 🌿 pjt 관련 값을 store에 저장할 수 있도록 함수를 불러옵시다. */}
+    const setPjtName = usePjtFromModalStore(state => state.setPjtName);
+    const setPjtId = usePjtFromModalStore(state => state.setPjtId);
+
     const handleProjectNameChange = (event) => {
         setProjectName(event.target.value);
     };
 
     const handleSend = async () => {
         try {
-          const response = await postProject({name: projectName});
-          console.log(response);
-          const id = response.data.id;
-          setProjectId(id);
+            const response = await postProject({name: projectName});
+            console.log(response);
+            const id = response.data.id;
+            // setProjectId(id);
+
+            {/* 🌿 받은 값을 store에 저장합시다. */}
+            setPjtId(id);
+            setPjtName(projectName)
+
           console.log(`Project created with ID: ${id}`);
           navigate(`/newproject/${id}`);
         } catch (error) {
@@ -64,7 +75,7 @@ export const Modal = () => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setShowModal(false)} color="primary">
+                <Button onClick={() => navigate('/Main')} color="primary">
                     Cancel
                 </Button>
                 <Button 

@@ -12,7 +12,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
-
+import { useNavigate } from 'react-router-dom';
 //서버요청용
 import { useQuery } from 'react-query'
 import { request } from "../../utils/axios-utils"
@@ -24,6 +24,7 @@ const fetchProject = () => {
 
 const MyProjectArea = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
     {/* 🐼 project GET hook */}
     const { data : projectData} = useQuery('projectList', fetchProject,{
@@ -54,7 +55,7 @@ const MyProjectArea = () => {
                 {/* 🌿 제목 */}
                 <p className='mt-6 tracking-tight text-3xl text-purple-800 font-semibold'>My Project </p>
                 {/* 🌿 검색창 */}
-                <div class="relative -ml-4 mt-5 flex w-8/12 h-12 flex-wrap items-stretch ">
+                <div className="relative -ml-4 mt-5 flex w-8/12 h-12 flex-wrap items-stretch ">
                     <input
                     type="search"
                     className="relative -mr-0.5 -ml-2 block min-w-0 flex-auto rounded-l-3xl border border-solid border-neutral-300 bg-transparent bg-clip-padding px-5 py-2 text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-purple-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
@@ -97,7 +98,7 @@ const MyProjectArea = () => {
                 <div className=' flex flex-col justify-center items-center'>
                     <ImageList sx={{ width: '95%', height: '224px'}} cols={5}>
                         {recentProjects && recentProjects.map((project) => (
-                            <Link to={`/${project._id}`}>
+                         <a href={`newproject/${project._id}`}>
                                 <ImageListItem key={project._id} sx={{ margin: '5px' }} >
                                     <img
                                         src={`${project.image}?w=248&fit=crop&auto=format`}
@@ -112,7 +113,7 @@ const MyProjectArea = () => {
                                         position="below"
                                     />
                                 </ImageListItem>
-                            </Link>
+                                </a>
                         ))}
                     </ImageList>
                 </div>
@@ -128,7 +129,7 @@ const MyProjectArea = () => {
             <div className=' flex flex-col justify-center items-center'>
                 <ImageList sx={{ width: '95%', height: '224px'}} cols={5}>
                     {projectData && projectData?.data?.sort((a, b) => new Date(a.time) - new Date(b.time)).map((project) => (
-                        <Link to={`/${project._id}`}>
+                        <Link to={`project/${project._id}`}>
                             <ImageListItem key={project._id} sx={{ margin: '5px' }} >
                                 <img
                                     src={`${project.image}?w=248&fit=crop&auto=format`}

@@ -21,6 +21,7 @@ import  VoiceChat  from './Voice/VoiceBar'
 
 import { useParams } from "react-router-dom";
 
+import * as awarenessProtocol from 'y-protocols/awareness.js'
 
 //🐬 과금버전 세팅
 const proOptions = {
@@ -56,26 +57,46 @@ const Editingbox2 = () => {
   let reconnectionAttempts = 0;
   const MAX_RECONNECTION_ATTEMPTS = 5; // Set your limit
 
+  const wsOpts = {
+    // Set this to `false` if you want to connect manually using wsProvider.connect()
+    connect: false,
+    // Specify a query-string that will be url-encoded and attached to the `serverUrl`
+    // I.e. params = { auth: "bearer" } will be transformed to "?auth=bearer"
+    params: {}, // Object<string,string>
+    // You may polyill the Websocket object (https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
+    // E.g. In nodejs, you could specify WebsocketPolyfill = require('ws')
+    // WebsocketPolyfill: Websocket,
+    // Specify an existing Awareness instance - see https://github.com/yjs/y-protocols
+    awareness: new awarenessProtocol.Awareness(ydoc)
+  }
+
   const wsProvider = new WebsocketProvider(
     'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
     projectId, // 🔥 프로젝트 아이디
-    ydoc
+    ydoc,
+    wsOpts
   );
 
-  wsProvider.on('status', event => {
-    console.log(event);
-    console.log(event.status);
-    if (event.status === "disconnected") {
-      reconnectionAttempts++;
-      
-      if (reconnectionAttempts > MAX_RECONNECTION_ATTEMPTS) {
-        console.log("Max reconnection attempts reached");
-        wsProvider.disconnect(); // Disconnect the provider
+
+
+  useEffect(() => {
+    wsProvider.connect();
+  
+    wsProvider.on('status', event => {
+      console.log(event);
+      console.log(event.status);
+  
+      if (event.status === "connecting") {
+        console.log("Disconnected, stopping reconnection attempts");
+        wsProvider.disconnect(); // Stop the connection attempts
+      } else if (event.status === "connected") {
+        console.log("Successfully connected");
       }
-    } else if (event.status === "connected") {
-      reconnectionAttempts = 0; // Reset the counter on successful connection
-    }
-  })
+    });
+  }, []);
+  
+
+
 
 
   const nodesMap = ydoc.getMap('nodes');

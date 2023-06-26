@@ -13,7 +13,7 @@ const isNodeResetChange = (change) => change.type === 'reset';
 
 export function useNodesStateSynced(ydoc, edgesMap) {
   const nodesMap = ydoc.getMap('nodes');
-  console.log('nodes state🔥: ', ydoc)
+  // console.log('nodes state🔥: ', ydoc)
      const [nodes, setNodes] = useState([]);
 
   //🌸 콜백함수 array의 교체 된것을 하나하나 바꿔줌 

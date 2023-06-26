@@ -20,7 +20,7 @@ import { useEdgesStateSynced } from '../../hooks/useEdgesStateSynced';
 import  VoiceChat  from './Voice/VoiceBar'
 
 import { useParams } from "react-router-dom";
-
+import axios from 'axios';
 import * as awarenessProtocol from 'y-protocols/awareness.js'
 
 //🐬 과금버전 세팅
@@ -42,50 +42,35 @@ const fitViewOptions = {
    padding: 3,
  };
 
-
-const Editingbox2 = () => {
-  const {projectId} = useParams();
-  /* * 
+   /* * 
    * 🐬 Ydoc 세팅 
    * */
+const ydoc = new Doc();
+
+const wsOpts = {
+  connect: false,
+  params: {},
+  awareness: new awarenessProtocol.Awareness(ydoc)
+};
+
+const Editingbox2 = () => {
+  const {projectId} = useParams();  
   
-  console.log('projectId : ', projectId)
-  // 🐬 ydocument 생성
-  const ydoc = new Doc();
-  console.log('ydoc created : ', ydoc)
-
-  let reconnectionAttempts = 0;
-  const MAX_RECONNECTION_ATTEMPTS = 5; // Set your limit
-
-  const wsOpts = {
-    // Set this to `false` if you want to connect manually using wsProvider.connect()
-    connect: false,
-    // Specify a query-string that will be url-encoded and attached to the `serverUrl`
-    // I.e. params = { auth: "bearer" } will be transformed to "?auth=bearer"
-    params: {}, // Object<string,string>
-    // You may polyill the Websocket object (https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
-    // E.g. In nodejs, you could specify WebsocketPolyfill = require('ws')
-    // WebsocketPolyfill: Websocket,
-    // Specify an existing Awareness instance - see https://github.com/yjs/y-protocols
-    awareness: new awarenessProtocol.Awareness(ydoc)
-  }
 
   const wsProvider = new WebsocketProvider(
     'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
     projectId, // 🔥 프로젝트 아이디
-    ydoc,
+    ydoc, // 🔥 새롭게 전달 받을 도큐먼트 
     wsOpts
   );
-
-
+  const nodesMap = ydoc.getMap('nodes');
+  const edgesMap = ydoc.getMap('edges');
 
   useEffect(() => {
     wsProvider.connect();
-  
     wsProvider.on('status', event => {
       console.log(event);
       console.log(event.status);
-  
       if (event.status === "connecting") {
         console.log("Disconnected, stopping reconnection attempts");
         wsProvider.disconnect(); // Stop the connection attempts
@@ -93,28 +78,51 @@ const Editingbox2 = () => {
         console.log("Successfully connected");
       }
     });
+      // 🌟 Fetch nodes from the API
+// 🌟 Fetch project data from the API
+  // axios.get(`http://localhost:4000/project/${projectId}`)
+  axios.get(`https://hyeontae.shop/project/${projectId}`)
+  .then((res) => {
+    const data = res.data; 
+    console.log(res.data);
+
+    // Check if nodes data exists and is an array
+    if (data.node && Array.isArray(data.node)) {
+      // Loop over nodes array and set each node in the nodesMap
+      data.node.forEach(node => {
+        if (node && node.id) {
+          nodesMap.set(node.id, node);
+        }
+      });
+    } else {
+      console.log("No nodes data received or it is not an array.");
+    }
+
+    // Check if edges data exists and is an array
+    if (data.edge && Array.isArray(data.edge)) {
+      // Loop over edges array and set each edge in the edgesMap
+      data.edge.forEach(edge => {
+        if (edge && edge.id) {
+          edgesMap.set(edge.id, edge);
+          console.log(edgesMap);
+        }
+      });
+    } else {
+      console.log("No edges data received or it is not an array.");
+    }
+  })
+  .catch((err) => console.error(err)); // Use console.error to log errors
   }, []);
   
 
-
-
-
-  const nodesMap = ydoc.getMap('nodes');
-  const edgesMap = ydoc.getMap('edges');
-
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced(ydoc);
   const [nodes, onNodesChange] = useNodesStateSynced(ydoc, edgesMap);
-
-
 
   /* * 
    * 🐬 아니셜라이징 세팅
    * */
   
-
   const reactFlowWrapper = useRef(null); // 큰 react flow wrapper
-  
-  //🍀 webrtc 세팅
   
   const { project } = useReactFlow();
 
@@ -138,12 +146,11 @@ const Editingbox2 = () => {
       const tags = event.dataTransfer.getData('data/tags');
       console.log('🌲Getting type ', type); // 🍎 drag start에서 가져온 type
       console.log('🌲Getting image ', img); // 🍎 drag start에서 가져온 image 
-      //🥰 타입 확인 하기: 굳이 ? 
       if (typeof type === 'undefined' || !type) {
         return;
       }
 
-      //🌸 position 확인하기 새로 떨어뜨, react flow의 인스턴스를 사용
+
       const position = project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -156,12 +163,9 @@ const Editingbox2 = () => {
         data: { label: `${type}` , url: `${img}`, tags: `${tags}`},
       };
 
-      //🌼 webrtc 전에 있는 코드, 개인 편집
-      // setNodes((nds) => nds.concat(newNode)); 
       nodesMap.set(newNode.id, newNode);
     },
-    //🌼 webrtc 전에 있는 코드, 개인 편집
-    // [reactFlowInstance]
+    
   );
 
 
@@ -175,16 +179,11 @@ const Editingbox2 = () => {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      // onConnectStart={onConnectStart}
-      // onConnectEnd={onConnectEnd}
-      // onInit={setReactFlowInstance}
       onDrop={onDrop}
       onDragOver={onDragOver}
       proOptions={proOptions}
       nodeTypes={nodeTypes}
-      style= {{background : '#F3B0C3', position:'relative'}} // Mint!
-      // style= {{background : '#00008B'}} //
-      // onInit={setRfInstance}
+      style= {{background : '#F3B0C3', position:'relative'}} 
       fitView
       fitViewOptions={fitViewOptions}>
       <Controls position='top-left'/>

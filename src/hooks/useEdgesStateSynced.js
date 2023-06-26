@@ -9,7 +9,6 @@ const isEdgeRemoveChange = (change) => change.type === 'remove';
 const isEdgeResetChange = (change) => change.type === 'reset';
 
 export function useEdgesStateSynced(ydoc) {
-    console.log('🍎 edge ydoc: ', ydoc)
     const edgesMap = ydoc.getMap('edges');
     const [edges, setEdges] = useState([]);
 

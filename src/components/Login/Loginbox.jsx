@@ -30,6 +30,8 @@ const Loginbox = () => {
         .then(res => {
             console.log(res);
             if (res.status === 200) {
+                localStorage.setItem('userName', JSON.stringify(res.data.user.name));
+                localStorage.setItem('userEmail', JSON.stringify(res.data.user.email));
                 navigate('/Main');
             }
         })

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 //✉️소켓 통신용 import
 import io from 'socket.io-client';
 
+
 const VoiceChat = () => {
   {/*🌿 user에게 전달받은 변수들을 저장하는 useRef, useState*/}
   const socketRef = useRef();
@@ -12,20 +13,21 @@ const VoiceChat = () => {
   const controlsRef = useRef();
   const [members, setMembers] = useState([]);
   const { projectId } = useParams();
+  const nickname = localStorage.getItem('userName');
 
 {/* 🌿초기 렌더링때 실행되는 hook */}
   useEffect(() => {
     console.log("check render")
     {/*🌿 클라이언트 측에서 Socket.IO를 사용하여 '3001'서버와 클라이언트 소켓 연결을 설정하는 부분 */}
     // socketRef.current = io("wss://phodo.store/vc/", { transports: ['websocket'] });  
-    socketRef.current = io("wss://hyeontae.shop/ws");  //socketRef에 현재 
+    socketRef.current = io("ws://localhost:4000/ws");  //socketRef에 현재 
 
     {/*🌿 연결이 안됐으면, 콘솔창에 에러 띄우기 */}
     socketRef.current.on('connect_error', (err) => {
     console.log(`Connect error due to ${err.message}`);});
 
     {/*🌿 방 이름 : projectId, 닉네임 : 로컬스토리지에 저장된 userName */}
-    joinRoom(projectId, localStorage.getItem('userName'))
+    joinRoom(projectId, nickname)
 
     {/*🌿 'accept_join'이벤트를 수신 대기하다가 on되면, 안의 콜백 함수 호출
     setMembers(users): 이 부분은 React의 상태를 업데이트
@@ -101,7 +103,7 @@ const VoiceChat = () => {
       .then(offer => {
           return peerConnection.setLocalDescription(offer);})
       .then(() => {
-          const nickname = document.getElementById('nickname').value;
+          // const nickname = document.getElementById('nickname').value;
           socketRef.current.emit('offer', peerConnection.localDescription, socketId, nickname);
         }
       );
@@ -178,6 +180,7 @@ const VoiceChat = () => {
   }, []);
 
   const joinRoom = (roomName, nickname) => {
+    console.log()
     console.log("joinRoom function called with roomName:", roomName, "and nickname:", nickname); // 추가
 
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
@@ -206,10 +209,10 @@ const VoiceChat = () => {
   };
 
   return (
-  <div className='p-4 bg-white rounded shadow-md' style={{ width: '790px', height: '60px' }}>
+  <div className='p-4 rounded shadow-md' style={{ minWidth: '350px', height: '60px' }}>
     <div className="flex items-center">
       
-      <div className="flex-none overflow-x-auto p-1 bg-gray-100 rounded whitespace-nowrap" style={{ height: '32px', width: '120px' }}>
+      <div className="flex-none overflow-x-auto p-1 rounded whitespace-nowrap"  style={{ height: '32px', minWidth: '120px' }}>
         <ul id="members" className="m-0 p-0 inline-block">
             {members.map((member, index) => (
                 <li key={index} className="inline-block mr-2">{member.nickname}</li>
@@ -217,7 +220,7 @@ const VoiceChat = () => {
         </ul>
       </div>
       <p className="mx-2">quiet:</p>
-      <div ref={controlsRef} className="flex-none p-1 bg-gray-100 rounded overflow-x-auto whitespace-nowrap" style={{ height: '32px', width: '120px' }}>
+      <div ref={controlsRef} className="flex-none p-1 rounded overflow-x-auto whitespace-nowrap" style={{ height: '32px', minWidth: '120px' }}>
         {/* Mute button will be appended here */}
       </div>
     </div>

@@ -8,15 +8,17 @@ import { useEdgesStateSynced } from '../../../hooks/useEdgesStateSynced';
 const MemoNode = ({ id, data, selected }) => {
   // const { memo } = data ;  // Destructure memo and id from data.
   const [content, setContent] = useState(data.memo);
-  const [edges, onEdgesChange, onConnect] = useEdgesStateSynced(ydoc);
   const [nodes, onNodesChange] = useNodesStateSynced(ydoc, edgesMap);
-
   const updateNodeInternals = useUpdateNodeInternals();
 
   const onContentChange = (evt) => {
-    setContent(evt.target.value);
+    
+    const newContent = evt.target.value;
+    setContent(newContent);
     console.log('Id Changed: ', id);
     console.log('changing to: ' , evt.target.value);
+    updateNodeInternals(id);  // Trigger re-render of this node.
+    // onNodesChange(nodes.map(node => node.id === id ? { ...node, data: { ...node.data, memo: newContent } } : node));
     updateNodeInternals(id);  // Trigger re-render of this node.
   };
 
@@ -29,8 +31,10 @@ const MemoNode = ({ id, data, selected }) => {
             memo: content
         };
         nodesMap.set(nodeId, node);
-        
-        console.log('바뀌고 있어');
+        console.log('노드는 ', node);
+        console.log('바뀌고 있어 이건 확실해');
+        updateNodeInternals(nodeId);  // Trigger re-render of this node.
+        // onNodesChange(nodes.map(node => node.id === id ? { ...node, data: { ...node.data, memo: content } } : node));
       }
     });
   }, [content]);

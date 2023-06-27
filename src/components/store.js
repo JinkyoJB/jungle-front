@@ -43,3 +43,16 @@ userStore = devtools(userStore)
 userStore = persist(userStore, { name: 'userEmail' })
 
 export const useUserStore = create(userStore)
+
+{/* 🐼node data 용 ⬇️*/}
+let nodeStore = (set) => ({
+  memoData : '',
+  setmemoData : (data) => 
+    set((state) => ({ memoData : data})),
+
+})
+
+nodeStore = devtools(nodeStore)
+nodeStore = persist(nodeStore, { name: 'nodestore' })
+
+export const usenodeStore = create(nodeStore)

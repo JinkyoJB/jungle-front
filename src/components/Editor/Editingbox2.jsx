@@ -155,6 +155,8 @@ const Editingbox2 = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const img = event.dataTransfer.getData('data/imageurl');
       const tags = event.dataTransfer.getData('data/tags');
+      const memo = event.dataTransfer.getData('data/memo');
+      const title = event.dataTransfer.getData('data/title');
       console.log('🌲Getting type ', type); // 🍎 drag start에서 가져온 type
       console.log('🌲Getting image ', img); // 🍎 drag start에서 가져온 image 
       if (typeof type === 'undefined' || !type) {
@@ -171,7 +173,7 @@ const Editingbox2 = () => {
         id: getNodeId(),
         type,
         position,
-        data: { label: `${type}` , url: `${img}`, tags: `${tags}`},
+        data: { label: `${type}` , url: `${img}`, tags: `${tags}`, memo: `${memo}`, title: `${title}`},
       };
 
       nodesMap.set(newNode.id, newNode);

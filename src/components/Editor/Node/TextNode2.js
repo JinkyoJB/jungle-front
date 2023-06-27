@@ -26,7 +26,7 @@ function TextNode2({ data, isConnectable }) {
         <input
           type="text"
           id="title"
-          value={title}
+          value={data.title}
           onChange={onTitleChange}
           className="input-box"
         />

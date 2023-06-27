@@ -69,7 +69,7 @@ const Editingbox2 = () => {
   
 
   const wsProvider = new WebsocketProvider(
-    'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
+    'ws://localhost:1234', // 🔥 요청을 보낼 웹소켓 서버
     projectId, // 🔥 프로젝트 아이디
     ydoc, // 🔥 새롭게 전달 받을 도큐먼트 
     wsOpts

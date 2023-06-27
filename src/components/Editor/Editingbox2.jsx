@@ -69,7 +69,7 @@ const Editingbox2 = () => {
   
 
   const wsProvider = new WebsocketProvider(
-    'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
+    'ws://localhost:1234', // 🔥 요청을 보낼 웹소켓 서버
     projectId, // 🔥 프로젝트 아이디
     ydoc, // 🔥 새롭게 전달 받을 도큐먼트 
     wsOpts
@@ -155,6 +155,7 @@ const Editingbox2 = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const img = event.dataTransfer.getData('data/imageurl');
       const tags = event.dataTransfer.getData('data/tags');
+      const memo = event.dataTransfer.getData('data/memo');
       console.log('🌲Getting type ', type); // 🍎 drag start에서 가져온 type
       console.log('🌲Getting image ', img); // 🍎 drag start에서 가져온 image 
       if (typeof type === 'undefined' || !type) {
@@ -171,7 +172,8 @@ const Editingbox2 = () => {
         id: getNodeId(),
         type,
         position,
-        data: { label: `${type}` , url: `${img}`, tags: `${tags}`},
+        data: { label: `${type}` , url: `${img}`, tags: `${tags}`,
+                memo: `${memo}`},
       };
 
       nodesMap.set(newNode.id, newNode);

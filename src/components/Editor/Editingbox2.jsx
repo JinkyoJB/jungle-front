@@ -56,7 +56,9 @@ const fitViewOptions = {
    /* * 
    * 🐬 Ydoc 세팅 
    * */
-const ydoc = new Doc();
+export const ydoc = new Doc();
+export const nodesMap = ydoc.getMap('nodes');
+export const edgesMap = ydoc.getMap('edges');
 
 const wsOpts = {
   connect: false,
@@ -74,8 +76,7 @@ const Editingbox2 = () => {
     ydoc, // 🔥 새롭게 전달 받을 도큐먼트 
     wsOpts
   );
-  const nodesMap = ydoc.getMap('nodes');
-  const edgesMap = ydoc.getMap('edges');
+  
 
   useEffect(() => {
     wsProvider.connect();

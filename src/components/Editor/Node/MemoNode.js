@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Handle, Position, NodeResizer } from 'reactflow';
 import { useUpdateNodeInternals } from 'reactflow';
+import {ydoc , nodesMap, edgesMap } from './../Editingbox2'
+import { useNodesStateSynced } from '../../../hooks/useNodesStateSynced';
+import { useEdgesStateSynced } from '../../../hooks/useEdgesStateSynced';
 
 const MemoNode = ({ id, data, selected }) => {
   // const { memo } = data ;  // Destructure memo and id from data.
   const [content, setContent] = useState(data.memo);
+  const [edges, onEdgesChange, onConnect] = useEdgesStateSynced(ydoc);
+  const [nodes, onNodesChange] = useNodesStateSynced(ydoc, edgesMap);
 
   const updateNodeInternals = useUpdateNodeInternals();
 
@@ -14,6 +19,21 @@ const MemoNode = ({ id, data, selected }) => {
     console.log('changing to: ' , evt.target.value);
     updateNodeInternals(id);  // Trigger re-render of this node.
   };
+
+  useEffect(() => {
+    // This is your map iteration code 
+    nodesMap.forEach((node, nodeId) => {
+      if (node.selected === true) {
+        node.data = {
+            ...node.data,
+            memo: content
+        };
+        nodesMap.set(nodeId, node);
+        
+        console.log('바뀌고 있어');
+      }
+    });
+  }, [content]);
 
   const handleStyle = {
     background: 'red', // 핸들의 배경색 설정

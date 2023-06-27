@@ -8,9 +8,9 @@ import Button from '@mui/material/Button';
 
 const MainFeaturedPost =() => {
   const post = {
-    title: 'Photo 업무를 함께 DO!',
+    // title: 'Photo 업무를 함께 DO!',
     description: '서로 어떻게 공유하느냐가 업무 효율을 좌우합니다.\n프로젝트 멤버들에게 일일이 묻고 물어 저 멀리 자료를 찾아 삼만리를 떠나던 과거는 이제 안녕!\nPhoDo는 효율이 중요한 당신을 위한 사진 중심 협업 사이트입니다.',
-    image: '/mainImg.jpg',
+    image: '/work.jpg',
     imageText: '',
     linkText: 'Project 만들기',
   };

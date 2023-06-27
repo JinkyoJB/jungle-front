@@ -18,6 +18,7 @@ export function useNodesStateSynced(ydoc, edgesMap) {
 
   //🌸 콜백함수 array의 교체 된것을 하나하나 바꿔줌 
   const onNodesChanges = useCallback((changes) => {
+    console.log('changes: ', changes);
     const nodes = Array.from(nodesMap.values());
 
     //🌸 노드의 교체를 바꿔줌, 계속해서 현재를 업데이트 시켜줌, 노드가 바뀌면 엣지도 바뀜을 알아야한다

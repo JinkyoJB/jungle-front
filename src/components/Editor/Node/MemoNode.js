@@ -3,20 +3,16 @@ import { Handle, Position, NodeResizer } from 'reactflow';
 import { useUpdateNodeInternals } from 'reactflow';
 
 const MemoNode = ({ id, data, selected }) => {
-  const { memo } = data ;  // Destructure memo and id from data.
+  // const { memo } = data ;  // Destructure memo and id from data.
   const [content, setContent] = useState(data.memo);
 
   const updateNodeInternals = useUpdateNodeInternals();
 
   const onContentChange = (evt) => {
     setContent(evt.target.value);
-    console.log(evt.target.value);
-    console.log('DATA.MEMO: ',  memo);
-    console.log('MEMO: ',  content);
+    console.log('Id Changed: ', id);
+    console.log('changing to: ' , evt.target.value);
     updateNodeInternals(id);  // Trigger re-render of this node.
-    console.log('DATA.MEMO: ',  memo);
-    console.log('MEMO: ',  content);
-    console.log(id);
   };
 
   const handleStyle = {

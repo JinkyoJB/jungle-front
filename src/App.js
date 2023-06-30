@@ -21,6 +21,10 @@ import Editor4 from "./pages/Editor/Editor4.jsx"
 import {Modal} from "./pages/Modal/Modal.jsx"
 import Report from "./pages/Report/Report.jsx"
 
+//workflow set
+import Flowchart from "./pages/Flowchart/Flowchart.jsx"
+
+
 //react query practice set
 import Practice from "./pages/Practice/Practice.jsx"
 import Test from "./pages/Practice/Test.jsx"
@@ -56,11 +60,13 @@ function App() {
         <Route path="/report/:projectId" element={<Report />} />
           {/* Main */}
           <Route path="/" element={<MainPage />} />
+          
           {/* login set */}
           <Route path="/Login" element={<Login />} />
           <Route path="/forgotpw" element={<Forgotpw />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset/:token" element={<Passwordchange />} />
+          
           {/* My page */}
           <Route path="/mypage" element={<Mypage />} />
 
@@ -69,12 +75,16 @@ function App() {
           <Route path="/newproject/:projectId" element={<Editor2 />} />
           <Route path="/existingproject" element={<Editor4 />} />
 
+          {/* Workflow set */}
+          <Route path="/flowchart/:projectId" element= {<Flowchart />} />
+
           {/* react query sample */}
           <Route path="/practice" element={<Practice />} />
           <Route path="/Test" element={<Test />} />
 
           <Route path="/myproject" element={<Myproject />} /> 
           <Route path="*" element={<Navigate to="/"/>} />
+
         </Routes>
     </div>
     </BrowserRouter>

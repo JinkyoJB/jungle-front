@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Node, useReactFlow } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import { timer } from 'd3-timer';
 
-export type UseAnimatedNodeOptions = {
-  animationDuration?: number;
-};
-
-function useAnimatedNodes(nodes: Node[], { animationDuration = 300 }: UseAnimatedNodeOptions = {}) {
+function useAnimatedNodes(nodes, { animationDuration = 300 } = {}) {
   const [tmpNodes, setTmpNodes] = useState(nodes);
   const { getNode } = useReactFlow();
 

@@ -1,6 +1,4 @@
-import { Node, Edge } from 'reactflow';
-
-export const nodes: Node[] = [
+export const nodes = [
   {
     id: 'A',
     position: { x: 0, y: 0 },
@@ -43,7 +41,7 @@ export const nodes: Node[] = [
   },
 ];
 
-export const edges: Edge[] = [
+export const edges = [
   {
     id: 'A->B',
     source: 'A',

@@ -1,15 +1,10 @@
-import React, { MouseEventHandler } from 'react';
-import { Handle, NodeProps, Position, useReactFlow } from 'reactflow';
+import React from 'react';
+import { Handle, useReactFlow } from 'reactflow';
 
 import styles from './styles.module.css';
 
-type GetLabelParams = {
-  expanded: boolean;
-  expandable: boolean;
-};
-
 // this function returns the label for the node based on the current state
-function getLabel({ expanded, expandable }: GetLabelParams): string {
+function getLabel({ expanded, expandable }) {
   if (!expandable) {
     return 'nothing to expand';
   }
@@ -17,10 +12,10 @@ function getLabel({ expanded, expandable }: GetLabelParams): string {
   return expanded ? 'Click to collapse ▲' : 'Click to expand ▼';
 }
 
-export default function CustomNode({ data, id, xPos, yPos }: NodeProps) {
+export default function CustomNode({ data, id, xPos, yPos }) {
   const { addNodes, addEdges } = useReactFlow();
 
-  const addChildNode: MouseEventHandler = (evt) => {
+  const addChildNode = (evt) => {
     // prevent the expand/collapse behaviour when a new node is added while the
     // node is expanded
     if (data.expanded) {
@@ -41,8 +36,8 @@ export default function CustomNode({ data, id, xPos, yPos }: NodeProps) {
   return (
     <div className={styles.node}>
       <div className={styles.label}>{label}</div>
-      <Handle position={Position.Top} type="target" />
-      <Handle position={Position.Bottom} type="source" />
+      <Handle position="top" type="target" />
+      <Handle position="bottom" type="source" />
       <div className={styles.button} onClick={addChildNode}>
         + add child node
       </div>

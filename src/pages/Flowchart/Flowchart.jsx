@@ -1,15 +1,10 @@
-import React, { useCallback, useState, MouseEvent } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReactFlow, {
   applyEdgeChanges,
   applyNodeChanges,
   ReactFlowProvider,
   MiniMap,
   Background,
-  OnNodesChange,
-  OnEdgesChange,
-  NodeMouseHandler,
-  Node,
-  Edge,
 } from 'reactflow';
 
 import CustomNode from './CustomNode';
@@ -27,23 +22,17 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
-type ExpandCollapseExampleProps = {
-  treeWidth?: number;
-  treeHeight?: number;
-  animationDuration?: number;
-};
-
-function ReactFlowPro({ treeWidth = 220, treeHeight = 100, animationDuration = 300 }: ExpandCollapseExampleProps = {}) {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+function ReactFlowPro({ treeWidth = 220, treeHeight = 100, animationDuration = 300 } = {}) {
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
 
   const { nodes: visibleNodes, edges: visibleEdges } = useExpandCollapse(nodes, edges, { treeWidth, treeHeight });
   const { nodes: animatedNodes } = useAnimatedNodes(visibleNodes, { animationDuration });
 
-  const onNodesChange: OnNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
-  const onEdgesChange: OnEdgesChange = useCallback((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
+  const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
+  const onEdgesChange = useCallback((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
 
-  const onNodeClick: NodeMouseHandler = useCallback(
+  const onNodeClick = useCallback(
     (_, node) => {
       setNodes((nds) =>
         nds.map((n) => {
@@ -83,7 +72,7 @@ function ReactFlowPro({ treeWidth = 220, treeHeight = 100, animationDuration = 3
   );
 }
 
-function ReactFlowWrapper(props: ExpandCollapseExampleProps) {
+function Flowchart(props) {
   return (
     <ReactFlowProvider>
       <ReactFlowPro {...props} />
@@ -91,4 +80,4 @@ function ReactFlowWrapper(props: ExpandCollapseExampleProps) {
   );
 }
 
-export default ReactFlowWrapper;
+export default Flowchart;

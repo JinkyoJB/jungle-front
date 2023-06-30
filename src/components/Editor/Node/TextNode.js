@@ -1,11 +1,12 @@
 import { fontSize } from '@mui/system';
-import { useState, useCallback, useEffect } from 'react';
-import { Handle, Position } from 'reactflow';
-import { nodesMap } from '../Editingbox2';
+import { useState, useCallback, useEffect, DragEvent} from 'react';
+import { Handle, Position, NodeProps } from 'reactflow';
+import { nodesMap, edgesMap } from '../Editingbox2';
+import cx from 'classnames'
 
-import './index.css';
+import styles from './index.css';
 
-function TextNode({ data, isConnectable }) {
+function TextNode({ data, isConnectable, sourcePosition, targetPosition }) {
   const [title, setTitle] = useState(data.title);
 
   const onTitleChange = useCallback((evt) => {
@@ -13,7 +14,32 @@ function TextNode({ data, isConnectable }) {
     setTitle(normalizedTitle);
   }, []);
 
+  /********* 🔥 노드를 드롭영역으로 지정 **********/
+  const [isDropzoneActive, setDropzoneActive] = useState(false);
+
+  const onDrop = () => {
+    setDropzoneActive(false);
+  };
+
+  const onDragOver = (evt) => {
+    evt.preventDefault();
+  };
+
+  const onDragEnter = () => {
+    setDropzoneActive(true);
+  };
+
+  const onDragLeave = () => {
+    setDropzoneActive(false);
+  };
+
+  // 노드 영역에 드랍시킬 때 스타일 지정.
+  const className = cx(styles.node, { [styles.nodeDropzone]: isDropzoneActive });
+
+  /****************************************/
+
   useEffect(() => {
+
     // This is your map iteration code 
     nodesMap.forEach((node, nodeId) => {
       if (node.selected === true) {
@@ -28,10 +54,16 @@ function TextNode({ data, isConnectable }) {
     });
   }, [title]);
 
+
   return (
-    <div className="textNode bg-white px-5 py-5 rounded-lg">
-      <Handle type="target" position={Position.Top} id="top" isConnectable={isConnectable} />
-      <Handle type="target" position={Position.Left} id="left" isConnectable={isConnectable} />
+    <div 
+      className={className} 
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}>
+      <Handle type="target" position={targetPosition || Position.Top} id="top" isConnectable={isConnectable} />
+
       <div>
         <textarea
           id="title"
@@ -47,10 +79,10 @@ function TextNode({ data, isConnectable }) {
           }}
         />
       </div>
-      <Handle type="source" position={Position.Right} id="right" isConnectable={isConnectable} />
+
       <Handle
         type="source"
-        position={Position.Bottom}
+        position={sourcePosition || Position.Bottom}
         id="bottom"
         // style={handleStyle}
         isConnectable={isConnectable}

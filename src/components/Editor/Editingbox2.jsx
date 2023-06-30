@@ -22,7 +22,7 @@ import ConnectionLine from './Edge/ConnectionLine'
 import CustomEdge from './Edge/CustomEdge';
 
 // 리액트 플로우 노드 
-import ReactFlow, { ReactFlowProvider, useReactFlow, Controls, MiniMap, Background, BackgroundVariant} from 'reactflow';
+import ReactFlow, { updateEdge, MarkerType, ReactFlowProvider, useReactFlow, Controls, MiniMap, Background, BackgroundVariant} from 'reactflow';
 import { Doc } from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 
@@ -36,12 +36,19 @@ import axios from 'axios';
 import * as awarenessProtocol from 'y-protocols/awareness.js'
 
 import {createNewDoc } from './ydoc'
+import useAutoLayout from './useAutoLayout';
 
 
 //:dolphin: 웹 알티시 테스팅
 const proOptions = {
   account: 'paid-pro',
   hideAttribution: true,
+};
+
+const defaultEdgeOptions = {
+  type: 'smoothstep',
+  markerEnd: { type: MarkerType.Arrow },
+  pathOptions: { offset: 5 },
 };
 
 //:dolphin: 노드 타입 세팅
@@ -87,68 +94,68 @@ const wsOpts = {
 
 const Editingbox2 = () => {
   const {projectId} = useParams();  
+
+//   const wsProvider = new WebsocketProvider(
+//     // 'ws://localhost:1234', // :fire: 요청을 보낼 웹소켓 서버
+//     'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
+//     projectId, // :fire: 프로젝트 아이디
+//     ydoc, // :fire: 새롭게 전달 받을 도큐먼트 
+//     wsOpts
+//   );
   
 
-  const wsProvider = new WebsocketProvider(
-    // 'ws://localhost:1234', // :fire: 요청을 보낼 웹소켓 서버
-    'wss://phodo.store/ws', // 🔥 요청을 보낼 웹소켓 서버
-    projectId, // :fire: 프로젝트 아이디
-    ydoc, // :fire: 새롭게 전달 받을 도큐먼트 
-    wsOpts
-  );
-  
+//   useEffect(() => {
+//     wsProvider.connect();
+//     wsProvider.on('status', event => {
+//       console.log(event);
+//       console.log(event.status);
+//       if (event.status === "connecting") {
+//         console.log("Disconnected, stopping reconnection attempts");
+//         wsProvider.disconnect(); // Stop the connection attempts
+//       } else if (event.status === "connected") {
+//         console.log("Successfully connected");
+//       }
+//     });
+//       // :star2: Fetch nodes from the API
+// // :star2: Fetch project data from the API
+//   // axios.get(`http://localhost:4000/project/${projectId}`)
+//   axios.get(`https://hyeontae.shop/project/${projectId}`)
+//   .then((res) => {
+//     const data = res.data; 
+//     console.log(res.data);
 
-  useEffect(() => {
-    wsProvider.connect();
-    wsProvider.on('status', event => {
-      console.log(event);
-      console.log(event.status);
-      if (event.status === "connecting") {
-        console.log("Disconnected, stopping reconnection attempts");
-        wsProvider.disconnect(); // Stop the connection attempts
-      } else if (event.status === "connected") {
-        console.log("Successfully connected");
-      }
-    });
-      // :star2: Fetch nodes from the API
-// :star2: Fetch project data from the API
-  // axios.get(`http://localhost:4000/project/${projectId}`)
-  axios.get(`https://hyeontae.shop/project/${projectId}`)
-  .then((res) => {
-    const data = res.data; 
-    console.log(res.data);
+//     // Check if nodes data exists and is an array
+//     if (data.node && Array.isArray(data.node)) {
+//       // Loop over nodes array and set each node in the nodesMap
+//       data.node.forEach(node => {
+//         if (node && node.id) {
+//           nodesMap.set(node.id, node);
+//         }
+//       });
+//     } else {
+//       console.log("No nodes data received or it is not an array.");
+//     }
 
-    // Check if nodes data exists and is an array
-    if (data.node && Array.isArray(data.node)) {
-      // Loop over nodes array and set each node in the nodesMap
-      data.node.forEach(node => {
-        if (node && node.id) {
-          nodesMap.set(node.id, node);
-        }
-      });
-    } else {
-      console.log("No nodes data received or it is not an array.");
-    }
-
-    // Check if edges data exists and is an array
-    if (data.edge && Array.isArray(data.edge)) {
-      // Loop over edges array and set each edge in the edgesMap
-      data.edge.forEach(edge => {
-        if (edge && edge.id) {
-          edgesMap.set(edge.id, edge);
-          console.log(edgesMap);
-        }
-      });
-    } else {
-      console.log("No edges data received or it is not an array.");
-    }
-  })
-  .catch((err) => console.error(err)); // Use console.error to log errors
-  }, []);
+//     // Check if edges data exists and is an array
+//     if (data.edge && Array.isArray(data.edge)) {
+//       // Loop over edges array and set each edge in the edgesMap
+//       data.edge.forEach(edge => {
+//         if (edge && edge.id) {
+//           edgesMap.set(edge.id, edge);
+//           console.log(edgesMap);
+//         }
+//       });
+//     } else {
+//       console.log("No edges data received or it is not an array.");
+//     }
+//   })
+//   .catch((err) => console.error(err)); // Use console.error to log errors
+//   }, []);
   
 
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced(ydoc);
   const [nodes, onNodesChange] = useNodesStateSynced(ydoc, edgesMap);
+
 
   /* * 
    * :dolphin: 아니셜라이징 세팅
@@ -205,7 +212,77 @@ const Editingbox2 = () => {
     
   );
 
+  const createNewNode = useCallback((nodeId, node) => {
+    const position = {
+      x: node.position.x,
+      y: node.position.y + 300,
+    };
 
+    const newNode = {
+      id: getNodeId(),
+      type: node.type,
+      position,
+      data: {
+        label: `${node.type}`,
+        url: `${node.data.url}`,
+        tags: `${node.data.tags}`,
+        memo: `${node.data.memo}`,
+        title: 'New Node',
+        content: 'New Node Content',
+        date: 'New Node Date',
+      },
+    };
+
+    nodesMap.set(newNode.id, newNode);
+
+    // 기존 노드의 아래쪽에서 새로운 노드의 위로 향하는 새로운 엣지 생성
+    const newEdge = {
+      id: getNodeId(),
+      source: node.id,
+      target: newNode.id,
+      type: 'smoothstep', // Set the edge type to 'smoothstep'
+      markerEnd: { type: 'Arrow' }, // Add a markerEnd with type 'Arrow'
+      pathOptions: { offset: 5 }, // Add pathOptions with offset 5
+    };
+
+    edgesMap.set(newEdge.id, newEdge);
+  }, []);
+
+  const onNodeClick = useCallback((event, node) => {
+    createNewNode(node.id, node);
+  }, [createNewNode]);
+
+  const [reactFlowInstance, setReactFlowInstance] = React.useState(null);
+  const onLoad = (rfInstance) => setReactFlowInstance(rfInstance);
+
+  useEffect(() => {
+    if (reactFlowInstance) {
+      reactFlowInstance.fitView();
+    }
+  }, [reactFlowInstance]);
+
+  useAutoLayout({ direction: 'LR' });
+
+  // const onConnect = (params) => {
+  //   const { source, target, sourceHandle, targetHandle } = params;
+
+  //   const newEdge = {
+  //     id: `${source}-${sourceHandle}-${target}-${targetHandle}`,
+  //     source,
+  //     target,
+  //     sourceHandle,
+  //     targetHandle,
+  //     type: 'customedge',
+  //   };
+
+  //   reactFlowInstance && reactFlowInstance.addEdge(newEdge);
+  // };
+
+  const onElementUpdate = (oldElement, newElement) => {
+    if (oldElement.position && newElement.position && oldElement.position !== newElement.position) {
+      updateEdge(oldElement, newElement);
+    }
+  };
 
   return (
     <>
@@ -224,7 +301,9 @@ const Editingbox2 = () => {
       edgeTypes={edgeTypes}
       style={{ background: '#CCCCCC', position: 'relative' }}
       fitView
-      fitViewOptions={fitViewOptions}>
+      fitViewOptions={fitViewOptions}
+      onElementUpdate={onElementUpdate}
+      onNodeClick={onNodeClick}>
       <Controls position='top-left' style={{top:'68px'}} />
       <MiniMap pannable position='bottom-left'/>
       <Background id="1" gap={30} color="#ffffff" variant={BackgroundVariant.Cross} />

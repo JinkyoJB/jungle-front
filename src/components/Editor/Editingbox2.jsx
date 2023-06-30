@@ -1,5 +1,5 @@
 // 컴포넌트
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, MouseEvent, DragEvent, DragEventHandler } from 'react';
 import MenuBarR from "../../components/Editor/MenuBarR";
 
 // 스타일 시트
@@ -22,7 +22,19 @@ import ConnectionLine from './Edge/ConnectionLine'
 import CustomEdge from './Edge/CustomEdge';
 
 // 리액트 플로우 노드 
-import ReactFlow, { updateEdge, MarkerType, ReactFlowProvider, useReactFlow, Controls, MiniMap, Background, BackgroundVariant} from 'reactflow';
+import ReactFlow, {
+  MarkerType,
+  ReactFlowProvider,
+  useReactFlow,
+  Node,
+  NodeTypes,
+  Controls,
+  MiniMap,
+  Background,
+  BackgroundVariant,
+  updateEdge
+} from 'reactflow';
+import { Edge } from 'react-flow-renderer';
 import { Doc } from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 
@@ -36,7 +48,8 @@ import axios from 'axios';
 import * as awarenessProtocol from 'y-protocols/awareness.js'
 
 import {createNewDoc } from './ydoc'
-import useAutoLayout from './useAutoLayout';
+import useAutoLayout, { Options as AutoLayoutOptions } from './useAutoLayout';
+import { SourceOutlined } from '@mui/icons-material';
 
 
 //:dolphin: 웹 알티시 테스팅
@@ -45,11 +58,11 @@ const proOptions = {
   hideAttribution: true,
 };
 
-const defaultEdgeOptions = {
-  type: 'smoothstep',
-  markerEnd: { type: MarkerType.Arrow },
-  pathOptions: { offset: 5 },
-};
+// const defaultEdgeOptions = {
+//   type: 'smoothstep',
+//   markerEnd: { type: MarkerType.Arrow },
+//   pathOptions: { offset: 5 },
+// };
 
 //:dolphin: 노드 타입 세팅
 const nodeTypes = {
@@ -61,15 +74,18 @@ const nodeTypes = {
   TaskNameNode : TaskNameNode,
   TextNode1: TextNode1, 
   TextNode2 : TextNode2,
-  TextNode3 , TextNode3,
+  TextNode3 : TextNode3,
   pix: PictureNode
 };
 
-//
+// //
 const edgeTypes = {
   coloredge : CustomEdge
 }
 
+// type ExampleProps = {
+//   direction?: Direction;
+// };
 
 //:dolphin: 노드 아이디 세팅
 let id = Math.floor(Math.random() * (10000 - 100 + 1)) + 100;
@@ -92,7 +108,7 @@ const wsOpts = {
   awareness: new awarenessProtocol.Awareness(ydoc)
 };
 
-const Editingbox2 = () => {
+const Editingbox2 = ({ direction = 'TB' }) => {
   const {projectId} = useParams();  
 
 //   const wsProvider = new WebsocketProvider(
@@ -163,7 +179,7 @@ const Editingbox2 = () => {
   
   const reactFlowWrapper = useRef(null); // 큰 react flow wrapper
   
-  const { project } = useReactFlow();
+  const { project, fitView } = useReactFlow();
 
   // 🍀:blossom: 기존에 드래그와 동일, 근데 기존은 그냥 컴포넌트 밖에다 세팅이 되어있음
   const onDragOver = useCallback((event) => {
@@ -193,7 +209,6 @@ const Editingbox2 = () => {
         return;
       }
 
-
       const position = project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -212,14 +227,16 @@ const Editingbox2 = () => {
     
   );
 
-  const createNewNode = useCallback((nodeId, node) => {
+  const createNewNode = (node) => {
     const position = {
       x: node.position.x,
       y: node.position.y + 300,
     };
 
-    const newNode = {
-      id: getNodeId(),
+    const targetId = `${nodes.length + 1}`;
+    const sourceId = node.id;
+    const targetNode = {
+      id: targetId,
       type: node.type,
       position,
       data: {
@@ -233,56 +250,49 @@ const Editingbox2 = () => {
       },
     };
 
-    nodesMap.set(newNode.id, newNode);
-
     // 기존 노드의 아래쪽에서 새로운 노드의 위로 향하는 새로운 엣지 생성
-    const newEdge = {
-      id: getNodeId(),
-      source: node.id,
-      target: newNode.id,
-      type: 'smoothstep', // Set the edge type to 'smoothstep'
-      markerEnd: { type: 'Arrow' }, // Add a markerEnd with type 'Arrow'
-      pathOptions: { offset: 5 }, // Add pathOptions with offset 5
+    const connectingEdge = {
+      id: `${sourceId}->${targetId}`,
+      source:sourceId,
+      target: targetId,
+      type: 'coloredge', // Set the edge type to 'smoothstep'
+      // markerEnd: { type: 'Arrow' }, // Add a markerEnd with type 'Arrow'
+      // pathOptions: { offset: 5 }, // Add pathOptions with offset 5
+      // width: 2,
+      // stroke: 'black'
     };
 
-    edgesMap.set(newEdge.id, newEdge);
-  }, []);
+    nodesMap.set(targetNode.id, targetNode);
+    edgesMap.set(connectingEdge.id, connectingEdge);
+  };
 
-  const onNodeClick = useCallback((event, node) => {
-    createNewNode(node.id, node);
-  }, [createNewNode]);
+  const onNodeClick = (MouseEvent, node) => {
+    createNewNode(node);
+  };
+
+  // const onNodesChange2 = (changes) => {
+  //   setNodes((nodes) => applyNodeChanges(changes, nodes));
+  // };
+  
+  // const onEdgesChange2 = (changes) => {
+  //   setEdges((edges) => applyEdgeChanges(changes, edges));
+  // };
+  
 
   const [reactFlowInstance, setReactFlowInstance] = React.useState(null);
   const onLoad = (rfInstance) => setReactFlowInstance(rfInstance);
 
   useEffect(() => {
-    if (reactFlowInstance) {
-      reactFlowInstance.fitView();
-    }
-  }, [reactFlowInstance]);
-
-  useAutoLayout({ direction: 'LR' });
-
-  // const onConnect = (params) => {
-  //   const { source, target, sourceHandle, targetHandle } = params;
-
-  //   const newEdge = {
-  //     id: `${source}-${sourceHandle}-${target}-${targetHandle}`,
-  //     source,
-  //     target,
-  //     sourceHandle,
-  //     targetHandle,
-  //     type: 'customedge',
-  //   };
-
-  //   reactFlowInstance && reactFlowInstance.addEdge(newEdge);
-  // };
+    fitView({ duration: 400 });
+  }, [nodes, fitView]);
 
   const onElementUpdate = (oldElement, newElement) => {
     if (oldElement.position && newElement.position && oldElement.position !== newElement.position) {
       updateEdge(oldElement, newElement);
     }
   };
+
+  useAutoLayout({ direction });
 
   return (
     <>

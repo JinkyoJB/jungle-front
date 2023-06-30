@@ -34,7 +34,10 @@ function TextNode({ data, isConnectable, sourcePosition, targetPosition }) {
   };
 
   // 노드 영역에 드랍시킬 때 스타일 지정.
-  const className = cx(styles.node, { [styles.nodeDropzone]: isDropzoneActive });
+  const className = styles.node;
+  if (isDropzoneActive) {
+    className += ' ' + styles.nodeDropzone;
+  }
 
   /****************************************/
 

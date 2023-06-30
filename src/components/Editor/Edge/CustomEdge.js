@@ -11,8 +11,9 @@ export default function CustomEdge(props) {
     targetY, 
     sourcePosition, 
     targetPosition, 
-    style = {stroke : 'red', strokeWidth : 4}, 
-    markerEnd,
+    type = 'smoothstep',
+    style = {stroke : 'black', strokeWidth : 3}, 
+    markerEnd = 'Arrow',
   } = props;
 
   const [edgePath, labelX, labelY] = getBezierPath({
@@ -22,6 +23,7 @@ export default function CustomEdge(props) {
     targetX,
     targetY,
     targetPosition,
+    type
   });
 
   return (

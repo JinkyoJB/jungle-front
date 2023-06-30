@@ -1,43 +1,31 @@
 import { useEffect } from 'react';
-import { Node, Edge, Position, ReactFlowState, useStore, useReactFlow } from 'reactflow';
-import { stratify, tree } from 'd3-hierarchy';
+import { Position, useStore, useReactFlow } from 'reactflow';
+import dagre from 'dagre';
 
-const Direction = 'TB' | 'LR' | 'RL' | 'BT';
+const Direction = 'TB' || 'LR' || 'RL' || 'BT';
+
+const Options = {
+  direction: Direction,
+};
 
 const positionMap = {
-  T: 'top',
-  L: 'left',
-  R: 'right',
-  B: 'bottom',
+  T: Position.Top,
+  L: Position.Left,
+  R: Position.Right,
+  B: Position.Bottom,
 };
 
-const getPosition = (x, y, direction) => {
-  switch (direction) {
-    case 'LR':
-      return { x: y, y: x };
-    case 'RL':
-      return { x: -y, y: -x };
-    case 'BT':
-      return { x: -x, y: -y };
-    default:
-      return { x, y };
-  }
-};
-
-const layout = tree()
-  .nodeSize([130, 120])
-  .separation(() => 1);
+const nodeCountSelector = (state) => state.nodeInternals.size;
+const nodesInitializedSelector = (state) =>
+  Array.from(state.nodeInternals.values()).every((node) => node.width && node.height);
 
 function useAutoLayout(options) {
+  console.log(options);
   const { direction } = options;
-
-  const nodeCountSelector = state => state.nodeInternals.size;
-  const nodesInitializedSelector = state =>
-    Array.from(state.nodeInternals.values()).every(node => node.width && node.height);
-
+  console.log(direction);
   const nodeCount = useStore(nodeCountSelector);
   const nodesInitialized = useStore(nodesInitializedSelector);
-  const { getNodes, getEdges, setNodes, setEdges, fitView } = useReactFlow();
+  const { getNodes, setNodes, setEdges, fitView } = useReactFlow();
 
   useEffect(() => {
     if (!nodeCount || !nodesInitialized) {
@@ -45,30 +33,73 @@ function useAutoLayout(options) {
     }
 
     const nodes = getNodes();
-    const edges = getEdges();
+    const dagreGraph = new dagre.graphlib.Graph();
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-    const hierarchy = stratify()
-      .id(d => d.id)
-      .parentId(d => edges.find(e => e.target === d.id)?.source)(nodes);
+    dagreGraph.setGraph({ rankdir: direction });
 
-    const root = layout(hierarchy);
+    nodes.forEach((node) => {
+      dagreGraph.setNode(node.id, {
+        width: node.width,
+        height: node.height,
+      });
+    });
 
-    setNodes(nodes =>
-      nodes.map(node => {
-        const { x, y } = root.find(d => d.id === node.id) || { x: node.position.x, y: node.position.y };
+    dagre.layout(dagreGraph);
+
+    const edges = dagreGraph.edges();
+
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        const { x, y } = dagreGraph.node(node.id);
 
         return {
           ...node,
           sourcePosition: positionMap[direction[1]],
           targetPosition: positionMap[direction[0]],
-          position: getPosition(x, y, direction),
+          position: { x, y },
           style: { opacity: 1 },
         };
       })
     );
 
-    setEdges(edges => edges.map(edge => ({ ...edge, style: { opacity: 1 } })));
-  }, [nodeCount, nodesInitialized, getNodes, getEdges, setNodes, setEdges, fitView, direction]);
+    edges.forEach((edge) => {
+      const { points } = edge;
+      const sourceNode = dagreGraph.node(edge.v);
+      const targetNode = dagreGraph.node(edge.w);
+
+      const sourcePort = positionMap[direction[1]];
+      const targetPort = positionMap[direction[0]];
+
+      const sourcePosition = {
+        x: sourceNode.x + points[0].x,
+        y: sourceNode.y + points[0].y,
+      };
+
+      const targetPosition = {
+        x: targetNode.x + points[points.length - 1].x,
+        y: targetNode.y + points[points.length - 1].y,
+      };
+
+      const sourceHandle = sourceNode.id + sourcePort;
+      const targetHandle = targetNode.id + targetPort;
+
+      const newEdge = {
+        id: `${sourceNode.id}-${targetNode.id}`,
+        source: sourceNode.id,
+        target: targetNode.id,
+        sourceHandle,
+        targetHandle,
+        sourcePosition,
+        targetPosition,
+        style: { opacity: 1 },
+      };
+
+      setEdges((edges) => [...edges, newEdge]);
+    });
+
+    fitView();
+  }, [nodeCount, nodesInitialized, getNodes, setNodes, setEdges, fitView, direction]);
 }
 
 export default useAutoLayout;

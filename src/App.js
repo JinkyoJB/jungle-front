@@ -21,6 +21,10 @@ import Editor4 from "./pages/Editor/Editor4.jsx"
 import {Modal} from "./pages/Modal/Modal.jsx"
 import Report from "./pages/Report/Report.jsx"
 
+// flowchart set 
+import Flowchart from "./pages/Flowchart/Flowchart.jsx"
+
+
 //react query practice set
 import Practice from "./pages/Practice/Practice.jsx"
 import Test from "./pages/Practice/Test.jsx"
@@ -53,7 +57,7 @@ function App() {
       <Navbar />
       <ScrollToTop />
       <Routes>
-        <Route path="/report/:projectId" element={<Report />} />
+        
           {/* Main */}
           <Route path="/" element={<MainPage />} />
           {/* login set */}
@@ -68,6 +72,12 @@ function App() {
           <Route path="/modal" element={<Modal />} />
           <Route path="/newproject/:projectId" element={<Editor2 />} />
           <Route path="/existingproject" element={<Editor4 />} />
+
+          {/* writing report  */}
+          <Route path="/report/:projectId" element={<Report />} />
+
+          {/* writing flowchart */}
+          <Route path="flowchart" element={<Flowchart/>}/>
 
           {/* react query sample */}
           <Route path="/practice" element={<Practice />} />

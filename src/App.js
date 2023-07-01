@@ -77,7 +77,7 @@ function App() {
           <Route path="/report/:projectId" element={<Report />} />
 
           {/* writing flowchart */}
-          <Route path="flowchart" element={<Flowchart/>}/>
+          <Route path="/flowchart" element={<Flowchart/>}/>
 
           {/* react query sample */}
           <Route path="/practice" element={<Practice />} />

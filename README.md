@@ -2,12 +2,14 @@
 ## 이미지 공유 협업 툴 
 
 ## 목차 
-1. 프로젝트 개요
+1. 프로젝트 개요 및 세부 사항
 2. 서비스 소개
 3. Frontend에서의 기능 및 구현한 점!
 4. 서비스 구조도
 5. 프로젝트 포스터
 ---
+
+
 ## 프로젝트 개요 
 프로젝트 기간 : 2023.06.12 ~ 2023.07.08
 <br>
@@ -23,12 +25,21 @@
 
 
 
-## 상세 사항
-![팀원](https://github.com/JinkyoJB/jungle-front/assets/85150616/35aea1f7-96dd-41f7-b534-3759634e0fc0)
+## 프로젝트 세부사항
+팀원 : [박영서(BE)](https://github.com/yeongseoPark), [김현태(BE)](https://github.com/HyeonTee), [정진교(FE)](https://github.com/JinkyoJB), [이호준(FE)](https://github.com/hodeethelion), [권도희(FE/BE)](https://github.com/shiwy15)
 
-![주제선정배경](https://github.com/JinkyoJB/jungle-front/assets/85150616/4bc7909f-75c2-4fe8-81d8-933852a04245)
+<br>
 
-![주요기능](https://github.com/JinkyoJB/jungle-front/assets/85150616/cf890e80-eb70-4b87-86a8-2a8f07ac8c2f)
+### 주제 선정 배경: 
+1. 프로젝트를 이행할 때 팀원 개개인들에게 자료들이 나뉘어 흩어져 있음
+2. 이미지 분류를 직접하기 번거롭고 시간이 걸림
+3. 이미지 작업물을 공유하고 의사소통을 동시에 할 수 있는 공간이 필요함
+4. 회의 내용을 정리해줄 필요성이 있음
+
+### 주요 기능: 
+1. 이미지 자동 카테고리 및 분류
+2. 음성 통화와 실시간 동시작업
+3. AI를 이용한 협업 내용 레포트 생성
 
 ## 주요 페이지
 <div align="center">

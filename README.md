@@ -26,7 +26,7 @@
 
 
 ## 프로젝트 세부사항
-팀원 : [박영서(BE)](https://github.com/yeongseoPark), [김현태(BE)](https://github.com/HyeonTee), [정진교(FE)](https://github.com/JinkyoJB), [이호준(FE)](https://github.com/hodeethelion), [권도희(FE/BE)](https://github.com/shiwy15)
+팀원 : [이호준(FE)](https://github.com/hodeethelion), [정진교(FE)](https://github.com/JinkyoJB), [권도희(FE/BE)](https://github.com/shiwy15), [박영서(BE)](https://github.com/yeongseoPark), [김현태(BE)](https://github.com/HyeonTee)
 
 <br>
 
@@ -48,13 +48,12 @@
 
 ## 기술적 챌린지 
 ![네트워크상황캡쳐본](https://github.com/JinkyoJB/jungle-front/assets/85150616/8e9e248e-0807-4dcc-b5eb-470a44e4c28a)
-
 ![효율적인 DB저장](https://github.com/JinkyoJB/jungle-front/assets/85150616/cf9291ba-4665-4141-aae3-acc9942b718d)
-
 ![카테고리 정확도 개선](https://github.com/JinkyoJB/jungle-front/assets/85150616/0c93abdd-af5b-4ee1-acfa-b10b62b98552)
+
+## 서비스 구조도
+<img width="308" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/91e6de8a-dea5-4b8f-b8e9-1c8dabf5f7ae">
+
 
 ## 서비스 Poster
 ![Phodo-poster](https://github.com/JinkyoJB/jungle-front/assets/85150616/7b73cce0-8646-420c-bc38-941c335c3e26)
-
-
-

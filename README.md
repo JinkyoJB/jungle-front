@@ -46,7 +46,7 @@
 
 
 #### 3. AI를 이용한 협업 내용 레포트 생성: 앞서 동시 작업했던 텍스트를 취합하여 보고서 초안을 작성해줍니다.
-<img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/73c87b8c-2791-4730-a6f7-e1be102bfd67">
+<img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/a48a7042-5518-47ac-92bb-be747cb65e94">
 
 
 ## 주요 페이지

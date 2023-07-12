@@ -1,14 +1,27 @@
-# Phodo Front 📷🗂️
+# Phodo  📷🗂️
+## 이미지 공유 협업 툴 
 
-이 프로젝트는 정글 6기(2023.06~2023.07기간)동안 제작한 이미지 공유 협업 툴: Phodo입니다.
-<br>
-front server는 react기반으로 되어 있으며 실할 때 npm start로 하시면 됩니다!
-
-### `npm start`
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
+## 목차 
+1. 프로젝트 개요
+2. 서비스 소개
+3. Frontend에서의 기능 및 구현한 점!
+4. 서비스 구조도
+5. 프로젝트 포스터
 ---
+## 프로젝트 개요 
+프로젝트 기간 : 2023.06.12 ~ 2023.07.08
+기술 스택: 
+| 분류                      | 기술                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend**              | <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/react--query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"> <img src="https://img.shields.io/badge/zustand-EC6550?style=for-the-badge&logo=zustand&logoColor=white"> <img src="https://img.shields.io/badge/tailwindcss-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white"> |
+| **Backend**               | 	<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">                                                                                                                                                                                                 |
+| **Database**              | 	<img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">                                                                                                                 |
+| **Infrastructure/DevOps** | 	<img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> <img src="https://img.shields.io/badge/aws_ec2-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">           |
+
+
+
+
+
 ## 상세 사항
 ![팀원](https://github.com/JinkyoJB/jungle-front/assets/85150616/35aea1f7-96dd-41f7-b534-3759634e0fc0)
 

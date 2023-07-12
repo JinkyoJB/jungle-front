@@ -45,7 +45,7 @@
 <img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/2ab0d93e-da5f-4dc0-91e7-a2f050116090">
 
 
-#### 3. AI를 이용한 협업 내용 레포트 생성: 앞서 동시 작업했던 텍스트를 취합해 보고서 초안을 작성해줍니다.
+#### 3. AI를 이용한 협업 내용 레포트 생성: 앞서 동시 작업했던 텍스트를 취합하여 보고서 초안을 작성해줍니다.
 <img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/73c87b8c-2791-4730-a6f7-e1be102bfd67">
 
 

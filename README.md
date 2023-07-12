@@ -4,7 +4,7 @@
 
 ## 목차 
 1. 프로젝트 개요 및 세부 사항
-2. 서비스 소개
+2. 주요 기능 및 페이지
 3. Frontend에서의 구현한 점
 5. 기술적 챌린지 및 서비스 구조도
 6. 프로젝트 포스터
@@ -32,29 +32,41 @@
 3. 이미지 작업물을 공유하고 의사소통을 동시에 할 수 있는 공간이 필요함
 4. 회의 내용을 정리해줄 필요성이 있음
 
-### 주요 기능 
-1. 이미지 자동 카테고리 및 분류
-![스크린샷 2023-07-12 오후 9 13 55](https://github.com/hodeethelion/phodo-front/assets/119830726/c6916fa6-fe59-4583-aaf2-b26a7dbc05c2)
+## 주요 기능 
+#### 1. 이미지 자동 카테고리 및 분류: 자동으로 카테고리가 분류된 사진을 관리할 수 있습니다.
 
-![스크린샷 2023-07-12 오후 9 14 34](https://github.com/hodeethelion/phodo-front/assets/119830726/6f1f211d-ee82-459a-b9b3-b319a5a97be4)
+<img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/c6916fa6-fe59-4583-aaf2-b26a7dbc05c2">
+<br>
+<img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/6f1f211d-ee82-459a-b9b3-b319a5a97be4">
 
-자동으로 카테고리가 분류된 사진을 관리할 수 있습니다.
+<br>
 
-3. 음성 통화와 실시간 동시작업
-![스크린샷 2023-07-12 오후 9 16 55](https://github.com/hodeethelion/phodo-front/assets/119830726/2ab0d93e-da5f-4dc0-91e7-a2f050116090)
+#### 2. 음성 통화와 실시간 동시작업: 실시간으로 음성통화를 하며 사진을 프로젝트 팀원들과 공유할 수 있습니다.
+<img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/2ab0d93e-da5f-4dc0-91e7-a2f050116090">
 
-실시간으로 음성통화를 하며 사진을 프로젝트 팀원들과 공유할 수 있습니다.
 
-4. AI를 이용한 협업 내용 레포트 생성
-![스크린샷 2023-07-12 오후 9 18 18](https://github.com/hodeethelion/phodo-front/assets/119830726/73c87b8c-2791-4730-a6f7-e1be102bfd67)
+#### 3. AI를 이용한 협업 내용 레포트 생성: 앞서 동시 작업했던 텍스트를 취합해 보고서의 초안을 작성해줍니다.
+<img width="400" alt="service" src="https://github.com/hodeethelion/phodo-front/assets/119830726/73c87b8c-2791-4730-a6f7-e1be102bfd67">
 
-앞서 동시 작업했던 내용들을 취합하여 보고서의 가이드라인을 작성해주며 보고서에 회의 중 사용했던 사진을 Drag & Drop 형식으로 삽입할 수 있습니다. 
-작성된 보고서를 pdf 형식으로 출력가능하고, 회의실내에 사용했던 사진들을 따로 zip file로 다운로드가 가능합니다.
 
-### 주요 페이지
+## 주요 페이지
 <div align="center">
   <img src="https://github.com/JinkyoJB/jungle-front/assets/85150616/49e1c287-6238-4451-98bf-73310ee2f92d" width="600">
 </div>
+
+## Frontend에서 구현하기 어려웠던 점
+### 1. 네트워크 상황에 따른 이미지 해상도 조절
+ - 네트워크 상황을 navigator.connection 객체를 사용하여 네트워크 상황 확인
+ - 네트워크 상황 기준점:
+   - 정상적인 네트워크 속도인 5-12Mbps: 4G에서 고해상도 이미지를 렌더링
+   - 그 이하: 128픽셀의 저해상도 이미지를 렌더링
+### 2. 동시편집 시 동시성 해결
+ - 문제: Click state를 기준으로 동시편집 구현 -> 서로 다른 노드 수정 불가
+   - 시도1: yjs awareness로 유저를 포함한 state로시도해보았으나 별도로 노드 권한이랑 엮기 쉽지 않았음
+   - 시도2: onchange event를 기준으로 동시 편집 구현
+      - 아이디 유저를 받아와서 store에 쌓아 놓았다가 textarea 에서 Onchange 가 있는 순간에만 해당 노드 오브젝트에다가 업데이트
+      - 텍스트가 계속 바뀌는 부분, 노드 포지션이 계속 달라지는 부분과 함께 node owner를 같이 업데이트
+
 
 ## 기술적 챌린지 
 ![네트워크상황캡쳐본](https://github.com/JinkyoJB/jungle-front/assets/85150616/8e9e248e-0807-4dcc-b5eb-470a44e4c28a)
